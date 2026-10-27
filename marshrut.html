@@ -221,6 +221,12 @@ input,select,textarea{border-radius:16px!important;border:1.5px solid var(--line
 .kb .keys button{border-radius:12px;background:var(--card);color:var(--ink)}
 </style>
 
+<style>#gate{position:fixed;inset:0;z-index:99999;background:#0b0b0f;color:#fff;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:16px}#gate form{width:100%;max-width:340px;text-align:center}#gate h1{font-size:22px;margin:0 0 6px}#gate p{margin:0 0 18px;opacity:.6;font-size:14px}#gate input{width:100%;box-sizing:border-box;padding:14px;border-radius:14px;border:1px solid #333;background:#17171d;color:#fff;font-size:16px;text-align:center}#gate button{width:100%;margin-top:10px;padding:14px;border:0;border-radius:14px;background:#fff;color:#000;font-size:16px;font-weight:600}#gate .e{color:#ff6b6b;font-size:13px;min-height:18px;margin-top:8px}</style>
+<div id="gate" style="display:none"><form id="gf"><h1>Маршрут</h1><p>Только для репетитора</p><input id="gp" type="password" placeholder="Код входа" autocomplete="current-password"><button type="submit">Войти</button><div class="e" id="ge"></div></form></div>
+<script>(function(){var H="999d9b15ed7b050f9109980d01e27ea03943512d7e2ba2517f4be620307d54e3",g=document.getElementById('gate');function sha(t){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)).then(function(b){return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')})}
+var ok=false;try{ok=localStorage.getItem('ege_tutor')===H}catch(e){}
+if(ok){g.remove();return}g.style.display='flex';
+document.getElementById('gf').addEventListener('submit',function(e){e.preventDefault();sha(document.getElementById('gp').value.trim()).then(function(h){if(h===H){try{localStorage.setItem('ege_tutor',H)}catch(e){}g.remove()}else{document.getElementById('ge').textContent='Неверный код'}})});})();</script>
 <div class="hl"><a data-back class="homelink" href="index.html">‹ Главная</a></div><main id="app"></main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
