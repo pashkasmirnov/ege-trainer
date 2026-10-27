@@ -1,0 +1,3402 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>.back,.homelink{display:inline-flex;align-items:center;gap:2px;margin:8px 0 4px;padding:9px 16px 9px 12px;border-radius:999px;background:var(--card);color:var(--ind);font-size:15px;font-weight:600;text-decoration:none!important;box-shadow:0 1px 3px rgba(0,0,0,.08);min-height:40px}.back:hover,.homelink:hover{filter:brightness(.97)}.back:active,.homelink:active{transform:scale(.97)}.hl{max-width:760px;margin:0 auto}@media(min-width:900px){.hl{max-width:880px}}</style><title>Маршрут ЕГЭ профиль</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+/* Тот же индиго, что у пробника и сайта ОГЭ. Сначала телефон: одна колонка, таблицы прокручиваются внутри себя. */
+:root{
+  --bg:#f5f5ff; --card:#ffffff; --ink:#1b1940; --muted:#5d5b86; --line:#dcdcf5; --soft:#ecebff;
+  --ind:#4338ca; --ind-d:#312e81; --on-ind:#ffffff; --ring:#a5a3f5;
+  --ok:#15803d; --ok-bg:#e3f6ea; --warn:#92580a; --warn-bg:#fff1d6; --bad:#b42318; --bad-bg:#fde8e6;
+  --k-core:#e8ecff; --k-rev:#e3f6ea; --k-cut:#fff1d6; --k-var:#fde8ef; --k-deep:#efe9ff;
+  --font:'Golos Text',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --display:'Unbounded','Golos Text',system-ui,sans-serif;
+  --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#11102b; --card:#1a1940; --ink:#eceaff; --muted:#a6a4d4; --line:#2e2c62; --soft:#25235a;
+  --ind:#6d6ff0; --ind-d:#a5a7ff; --on-ind:#ffffff; --ring:#5b59c9;
+  --ok:#6ee7a0; --ok-bg:#14301f; --warn:#f5c36a; --warn-bg:#35280e; --bad:#ff9d94; --bad-bg:#3a1c1b;
+  --k-core:#232a5e; --k-rev:#163322; --k-cut:#3a2d10; --k-var:#3d1c2a; --k-deep:#2d2456; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11102b; --card:#1a1940; --ink:#eceaff; --muted:#a6a4d4; --line:#2e2c62; --soft:#25235a;
+  --ind:#6d6ff0; --ind-d:#a5a7ff; --on-ind:#ffffff; --ring:#5b59c9;
+  --ok:#6ee7a0; --ok-bg:#14301f; --warn:#f5c36a; --warn-bg:#35280e; --bad:#ff9d94; --bad-bg:#3a1c1b;
+  --k-core:#232a5e; --k-rev:#163322; --k-cut:#3a2d10; --k-var:#3d1c2a; --k-deep:#2d2456; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--font);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 48px}
+main{max-width:760px;margin:0 auto}
+h1{font:700 24px/1.2 var(--display);margin:10px 0 6px;text-wrap:balance}
+h2{font:700 18px/1.3 var(--display);margin:28px 0 8px;text-wrap:balance}
+p{margin:8px 0}
+.muted{color:var(--muted);font-size:14px}
+button,select,input{font:inherit}
+button{font-weight:600;min-height:44px;padding:8px 14px;border-radius:12px;border:1.5px solid var(--ind);background:transparent;color:var(--ind-d);cursor:pointer;touch-action:manipulation}
+button:hover{background:var(--soft)}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+.primary{background:var(--ind);color:var(--on-ind);border-color:var(--ind)}
+.primary:hover{background:var(--ind-d);border-color:var(--ind-d)}
+input,select{min-height:44px;padding:8px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);max-width:100%}
+.codein{display:flex;gap:8px;flex-wrap:wrap}
+.codein input{flex:1 1 220px;min-width:0;font:600 19px var(--mono);letter-spacing:.04em;text-transform:uppercase}
+.err{color:var(--bad);font-weight:500}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin:12px 0}
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.sum div{display:grid;gap:2px}
+.sum b{font:700 22px/1.1 var(--display);font-variant-numeric:tabular-nums}
+.sum span{font-size:13px;color:var(--muted)}
+/* шкала прогноза */
+.scale{position:relative;height:84px;margin:18px 14px 6px}
+.scale .track{position:absolute;left:0;right:0;top:24px;height:8px;border-radius:99px;background:var(--soft)}
+.scale .fill{position:absolute;top:24px;height:8px;border-radius:99px;background:var(--ind)}
+.scale .mk{position:absolute;top:0;transform:translateX(-50%);display:grid;justify-items:center;font-size:12px;line-height:1.2;white-space:nowrap}
+.scale .mk i{width:2px;height:16px;background:currentColor;margin-top:2px}
+.scale .mk.goal{top:20px;flex-direction:column}
+.scale .mk.goal i{height:16px;margin:0 0 2px}
+.scale .mk{font-weight:600}
+.scale .goal{color:var(--bad)} .scale .now{color:var(--muted)} .scale .after{color:var(--ind-d)}
+.scale .ticks{position:absolute;left:0;right:0;top:66px;height:16px;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.fc{display:grid;gap:6px;font-size:15px}
+.fc b{font-variant-numeric:tabular-nums}
+.alert{border-radius:14px;padding:12px 14px;margin:12px 0;font-size:15px}
+.alert.warn{background:var(--warn-bg);color:var(--ink)}
+.alert.okk{background:var(--ok-bg)}
+.alert b{color:inherit}
+/* таблицы */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-weight:600;color:var(--muted);font-size:13px;background:var(--bg)}
+td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+.st{display:inline-block;font-weight:600;font-size:12px;border-radius:999px;padding:1px 8px;white-space:nowrap}
+.st.know{color:var(--ok);background:var(--ok-bg)} .st.gap,.st.skip{color:var(--bad);background:var(--bad-bg)} .st.partial{color:var(--warn);background:var(--warn-bg)} .st.unknown{color:var(--muted);background:var(--soft)}
+.st.inf{opacity:.7}
+.kind{display:inline-block;font-size:12px;font-weight:600;border-radius:8px;padding:1px 8px;color:var(--ink)}
+.kind.core{background:var(--k-core)}.kind.review{background:var(--k-rev)}.kind.cut{background:var(--k-cut)}.kind.variant{background:var(--k-var)}.kind.deep{background:var(--k-deep)}
+.marks{display:inline-flex;gap:4px;margin-left:4px}
+.marks button{min-height:34px;min-width:38px;padding:2px 6px;border-radius:9px;font-size:14px}
+.marks button[aria-pressed="true"]{background:var(--ind);color:var(--on-ind)}
+.start{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.start li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.start li .t{flex:1 1 220px;min-width:0}
+.start li .t b{font-variant-numeric:tabular-nums}
+.cfg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.cfg label{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+.cfg input,.cfg select{width:100%}
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:8px 0}
+summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style-position:inside}
+details .tw{border:0;border-top:1px solid var(--line);border-radius:0 0 14px 14px}
+.demo{font-size:13px;color:var(--muted);border:1px dashed var(--line);border-radius:12px;padding:8px 12px;margin-top:26px}
+.scale .ticks span{position:absolute;transform:translateX(-50%)}
+.cell{display:grid;gap:0;width:100%;min-height:52px;text-align:left;padding:6px 10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-variant-numeric:tabular-nums}
+.cell span{font-size:12px;font-weight:500;color:var(--muted)}
+.cell.on{border-color:var(--ind);background:var(--soft)}
+.docwrap{overflow-x:auto;background:var(--soft);border-radius:16px;padding:12px}
+.doc{width:100%;max-width:720px;margin:0 auto;background:#fff;color:#1b1940;border-radius:6px;padding:22px 22px 16px;font:13px/1.5 var(--font);box-shadow:0 2px 12px rgb(0 0 0 / .08)}
+.doc .dhead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;border-bottom:3px solid #4338ca;padding-bottom:10px}
+.doc .dk{font:700 17px/1.2 var(--display);color:#312e81}.doc .dt{font-size:12px;color:#5d5b86}.doc .dd{font-size:12px;color:#5d5b86;white-space:nowrap}
+.doc .dname{font:700 20px/1.2 var(--display);margin:12px 0 4px}
+.doc .dsec{margin-top:14px;break-inside:avoid}
+.doc .dh{font:700 13px/1.2 var(--display);color:#4338ca;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.doc .dgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+.doc .dgrid div{background:#f1f1ff;border-radius:8px;padding:8px 10px;display:grid}
+.doc .dgrid b{font:700 17px/1.1 var(--display)}.doc .dgrid span{font-size:11px;color:#5d5b86}
+.doc .dtab{width:100%;border-collapse:collapse;font-size:12px}
+.doc .dtab th{background:#f1f1ff;color:#5d5b86;font-weight:600;text-align:left;padding:5px 8px}
+.doc .dtab td{border-bottom:1px solid #e4e4f6;padding:5px 8px;vertical-align:top}
+.doc .g{color:#15803d;font-weight:600}.doc .y{color:#92580a;font-weight:600}.doc .r{color:#b42318;font-weight:600}
+.doc .dscale{position:relative;height:58px;margin:4px 18px 6px}
+.doc .dtrack{position:absolute;left:0;right:0;top:26px;height:8px;border-radius:9px;background:#e8e8fb}
+.doc .dfill{position:absolute;top:26px;height:8px;border-radius:9px;background:#4338ca}
+.doc .dmk{position:absolute;top:4px;transform:translateX(-50%);font-size:11px;font-weight:600;color:#5d5b86;white-space:nowrap}
+.doc .dmk.up{color:#312e81}
+.doc .dgoal{position:absolute;top:22px;transform:translateX(-50%);font-size:11px;font-weight:700;color:#b42318;white-space:nowrap;padding-top:18px;border-left:2px solid #b42318;height:34px;line-height:1;text-indent:4px}
+.doc .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.doc ul,.doc ol{margin:0;padding-left:18px}.doc li{margin:2px 0}
+.doc .dsm{font-size:11px;color:#5d5b86}
+.doc p{margin:6px 0}
+.doc .dfoot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:16px;padding-top:8px;border-top:1px solid #e4e4f6;font-size:11px;color:#5d5b86}
+@media (max-width:520px){.doc{padding:14px}.doc .two{grid-template-columns:1fr}.doc .dgrid{grid-template-columns:1fr 1fr 1fr}}
+.sm{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;justify-content:space-between;width:calc(100% - 20px);vertical-align:middle}
+.marks.bulk button{min-width:0;padding:2px 10px}
+summary{display:list-item}
+h3{font:700 15px/1.3 var(--display);margin:20px 0 8px;color:var(--ind-d)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.top h1{margin-bottom:10px}
+.hint{font-size:13px;color:var(--muted);margin:6px 0}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:14px 0 10px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 10px 8px;display:grid;gap:1px;min-width:0}
+.tile span{font-size:12px;color:var(--muted);line-height:1.2}
+.tile b{font:700 20px/1.15 var(--display);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tile small{font-size:12px;color:var(--muted)}
+@media (max-width:560px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:8px;scroll-margin-top:0}
+.steps button{display:flex;align-items:center;justify-content:center;gap:4px;min-height:46px;padding:4px 2px;min-width:0;white-space:nowrap;font-size:13px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-size:14px}
+.steps button i{display:none!important;flex:none;font-style:normal;display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--soft);font-size:12px}
+.steps button em{font-style:normal;font-size:18px;line-height:0;color:var(--ok)}
+.steps button[aria-current="step"]{border-color:var(--ind);background:var(--ind);color:var(--on-ind)}
+.steps button[aria-current="step"] i{background:var(--on-ind);color:var(--ind)}
+.steps button[aria-current="step"] em{color:var(--on-ind)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.steps button.done{border-color:var(--ok)}
+.stepbody{margin-top:6px}
+.sh{display:flex;align-items:center;gap:8px;margin:18px 0 8px}.sh h2{margin:0}
+.help{position:relative;background:none;border:0;margin:0}
+.help summary{list-style:none;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line);color:var(--muted);font-weight:700;font-size:14px;padding:0;cursor:pointer}
+.help summary::-webkit-details-marker{display:none}
+.help[open] div{position:absolute;z-index:6;left:-120px;top:32px;width:min(300px,80vw);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:13px;box-shadow:0 8px 24px rgb(0 0 0 / .12)}
+.list,.subs,.plan{list-style:none;padding:0;margin:10px 0;display:grid;gap:8px}
+.list li{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.list li.ok{border-color:var(--ok);background:var(--ok-bg)}.list li.bad{border-color:var(--bad);background:var(--bad-bg)}
+.list .t,.subs .t{flex:1;min-width:0}
+.list .sub{font-size:13px;color:var(--muted);margin-top:2px}
+.list code{font-family:var(--mono);color:var(--ink)}
+.next{width:100%;min-height:50px;margin-top:14px}
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}
+details[data-n] summary{display:flex;align-items:center;gap:10px;list-style:none;padding:12px 14px}
+details[data-n] summary::-webkit-details-marker{display:none}
+details[data-n] summary::after{content:'›';margin-left:auto;font-size:20px;color:var(--muted);transition:transform .15s}
+details[data-n][open] summary::after{transform:rotate(90deg)}
+.nh{flex:1;min-width:0;font-weight:500}
+.mbar{display:flex;width:84px;height:8px;border-radius:9px;overflow:hidden;background:var(--soft);flex:none}
+.mbar i{display:block}.mbar .know{background:var(--ok)}.mbar .partial{background:var(--warn)}.mbar .gap{background:var(--bad)}.mbar .unknown{background:var(--line)}
+.bulk{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:0 14px 10px}
+.bulk button{min-height:36px;padding:4px 10px;font-size:13px}
+.subs{padding:0 10px 10px;margin:0}
+.subs li{display:flex;gap:8px;align-items:center;border-top:1px solid var(--line);padding:8px 4px 0}
+.fcbig{display:grid;grid-template-columns:1fr auto 1fr 1.2fr;align-items:center;gap:6px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px;margin-top:14px;text-align:center}
+.fcbig.ok{border-color:var(--ok)}.fcbig.no{border-color:var(--warn)}
+.fcbig span{display:block;font-size:12px;color:var(--muted)}
+.fcbig b{font:700 30px/1.1 var(--display);font-variant-numeric:tabular-nums}
+.fcbig .arr{font-size:22px;color:var(--muted)}
+.fcbig .g{border-left:1px solid var(--line)}
+.fcbig em{display:block;font-style:normal;font-size:12px;font-weight:600}
+.fcbig.ok em{color:var(--ok)}.fcbig.no em{color:var(--warn)}
+.warnline{background:var(--warn-bg);border-radius:12px;padding:10px 12px;font-size:14px}
+.seg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:6px 0}
+.seg.two{grid-template-columns:1fr 1fr}
+.seg button{display:grid;gap:0;min-height:54px;padding:6px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-weight:500}
+.seg button small{font-size:11px;color:var(--muted)}.seg button span{font-size:12px;color:var(--muted)}
+.seg button[aria-pressed="true"]{border-color:var(--ind);background:var(--soft)}
+.row.small{margin-top:10px}.row.small label{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}.row.small input{width:74px}
+.nums{display:flex;flex-wrap:wrap;gap:6px}.nums span{font-weight:600;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:2px 8px}
+.kinds{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.plan li{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:14px}
+.plan .n{font-weight:700;min-width:22px;font-variant-numeric:tabular-nums;color:var(--muted)}
+.plan .p{flex:1 1 100%;padding-left:30px}
+.empty{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center;margin-top:14px}
+.empty p{color:var(--muted)}
+</style>
+<style>/* === Bento-тема: только оформление, логика страницы не затронута === */
+:root{--bg:#f2f2f7;--card:#fff;--ink:#1d1d1f;--muted:#6e6e73;--line:#e5e5ea;--soft:#e8e8ed;--ind:#0071e3;--ind-d:#0066cc;--on-ind:#fff;--ring:#7ab8f5;--paper:#fff;--ok:#1c8a3d;--ok-bg:#e3f5e8;--warn:#8a5a00;--warn-bg:#fff4dc;--bad:#c4261c;--bad-bg:#fdecea;--font:-apple-system,BlinkMacSystemFont,'SF Pro Text','Inter',system-ui,'Segoe UI',Roboto,sans-serif;--display:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter',system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--card:#1c1c1e;--ink:#f5f5f7;--muted:#a1a1a6;--line:#2c2c2e;--soft:#2c2c2e;--ind:#2997ff;--ind-d:#4aa8ff;--ring:#1b5a99;--ok:#5fd486;--ok-bg:#12301d;--warn:#f5c36a;--warn-bg:#35280e;--bad:#ff8a80;--bad-bg:#3a1c1b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#000;--card:#1c1c1e;--ink:#f5f5f7;--muted:#a1a1a6;--line:#2c2c2e;--soft:#2c2c2e;--ind:#2997ff;--ind-d:#4aa8ff;--ring:#1b5a99;--ok:#5fd486;--ok-bg:#12301d;--warn:#f5c36a;--warn-bg:#35280e;--bad:#ff8a80;--bad-bg:#3a1c1b;color-scheme:dark}
+body{letter-spacing:-.011em;-webkit-font-smoothing:antialiased;font-size:17px}
+.homelink{display:inline-flex;margin:4px 0 0;font-size:15px;color:var(--ind);text-decoration:none}
+h1{font:800 clamp(32px,7vw,52px)/1.04 var(--display)!important;letter-spacing:-.045em!important}
+h2{font:700 clamp(22px,4.6vw,30px)/1.12 var(--display)!important;letter-spacing:-.035em!important}
+h3{letter-spacing:-.02em}
+button{border-radius:999px;border:0;background:var(--soft);color:var(--ind);transition:transform .1s}
+button:hover{background:var(--line)}button:active{transform:scale(.98)}
+button.primary,.primary{background:var(--ind);color:#fff}
+button.primary:hover{filter:brightness(1.08)}
+.opt{border:2px solid transparent;border-radius:22px;background:var(--card);color:var(--ink)}
+.opt[aria-pressed="true"]{border-color:var(--ind);background:var(--card)}
+.card,.task,.pick,.note,.alert,.tw,.ex,.box,.sum{border-radius:26px!important}
+.card,.task,.pick{border:0!important;padding:18px 20px}
+.note{background:var(--card)!important}
+.tw{border:0!important;background:var(--card)}
+input,select,textarea{border-radius:16px!important;border:1.5px solid var(--line)}
+.bar{background:color-mix(in srgb,var(--bg) 82%,transparent)!important;backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px);border-bottom:0!important}
+.dots a{border-radius:10px;border:0;background:var(--card)}
+.tag,.st{border-radius:999px}
+@media (min-width:900px){body{font-size:18px}main{max-width:880px!important}}
+
+.steps button{border-radius:999px}.steps button[aria-current="step"]{background:var(--ind);color:#fff}
+.seg button{border-radius:20px;border:2px solid transparent;background:var(--card);color:var(--ink)}.seg button[aria-pressed="true"]{border-color:var(--ind);background:var(--card)}
+.marks button{border-radius:12px}.marks button[aria-pressed="true"]{background:var(--ind);color:#fff}
+.kb .keys button{border-radius:12px;background:var(--card);color:var(--ink)}
+</style>
+
+<div class="hl"><a data-back class="homelink" href="index.html">‹ Главная</a></div><main id="app"></main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+// Ядро пробника ЕГЭ (профиль): проверка ответов и код результата. Без DOM.
+// Работает в браузере (window.CoreEGE) и в Node (для тестов).
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.CoreEGE = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+  const EPS = 1e-6;
+
+  // ================= 1. Разбор выражений =================
+  // Понимает: 0,5  -12  1/2  3√2  √(2/3)  ⁴√32  11π/6  2π  log_3 5  log_5(2)  arctg(1/3)  2^10
+  // Неявное умножение: 3√2, 2π, 128(25-4√34)π/9.
+  function normInput(s) {
+    return String(s == null ? '' : s)
+      .replace(/[−–—]/g, '-').replace(/,/g, '.').replace(/°/g, '').replace(/[×·]/g, '*').replace(/:/g, '/')
+      .replace(/пи/gi, 'π').replace(/pi/gi, 'π')
+      .replace(/sqrt/gi, '√').replace(/корень/gi, '√')
+      .replace(/inf(inity)?/gi, '∞').replace(/бесконечность/gi, '∞')
+      .replace(/\s+/g, ' ').trim();
+  }
+  function tokenize(s) {
+    const t = [];
+    let i = 0;
+    while (i < s.length) {
+      const c = s[i];
+      if (c === ' ') { i++; continue; }
+      if (/[0-9.]/.test(c)) { let j = i; while (j < s.length && /[0-9.]/.test(s[j])) j++; t.push({ k: 'num', v: parseFloat(s.slice(i, j)) }); i = j; continue; }
+      if (c === 'π') { t.push({ k: 'num', v: Math.PI }); i++; continue; }
+      if (c === 'e' && !/[a-zа-я]/i.test(s[i + 1] || '')) { t.push({ k: 'num', v: Math.E }); i++; continue; }
+      if (c === '∞') { t.push({ k: 'inf' }); i++; continue; }
+      if (c === '√') { t.push({ k: 'root', n: 2 }); i++; continue; }
+      if ('²³⁴'.includes(c) && s[i + 1] === '√') { t.push({ k: 'root', n: { '²': 2, '³': 3, '⁴': 4 }[c] }); i += 2; continue; }
+      if (s.startsWith('log_', i)) { t.push({ k: 'log' }); i += 4; continue; }
+      if (s.startsWith('lg', i)) { t.push({ k: 'fn', f: x => Math.log10(x) }); i += 2; continue; }
+      if (s.startsWith('ln', i)) { t.push({ k: 'fn', f: x => Math.log(x) }); i += 2; continue; }
+      const fns = { arctg: Math.atan, arcsin: Math.asin, arccos: Math.acos, tg: Math.tan, sin: Math.sin, cos: Math.cos };
+      const f = Object.keys(fns).find(n => s.startsWith(n, i));
+      if (f) { t.push({ k: 'fn', f: fns[f] }); i += f.length; continue; }
+      if ('+-*/^()'.includes(c)) { t.push({ k: c }); i++; continue; }
+      throw new Error('Непонятный символ: «' + c + '»');
+    }
+    return t;
+  }
+  function evalExpr(str) {
+    const t = tokenize(normInput(str));
+    let p = 0;
+    const peek = () => t[p], eat = k => { if (!t[p] || t[p].k !== k) throw new Error('Ошибка в записи'); return t[p++]; };
+    const startsPrimary = x => x && (x.k === 'num' || x.k === '(' || x.k === 'root' || x.k === 'log' || x.k === 'fn' || x.k === 'inf');
+    function expr() { let v = term(); while (peek() && (peek().k === '+' || peek().k === '-')) { const o = t[p++].k; const r = term(); v = o === '+' ? v + r : v - r; } return v; }
+    function term() {
+      let v = unary();
+      for (;;) {
+        const x = peek();
+        if (x && (x.k === '*' || x.k === '/')) { p++; const r = unary(); v = x.k === '*' ? v * r : v / r; }
+        else if (startsPrimary(x)) { v = v * power(); } // неявное умножение
+        else break;
+      }
+      return v;
+    }
+    function unary() { if (peek() && peek().k === '-') { p++; return -unary(); } if (peek() && peek().k === '+') { p++; return unary(); } return power(); }
+    function power() { const b = primary(); if (peek() && peek().k === '^') { p++; const e = unary(); return Math.pow(b, e); } return b; }
+    function primary() {
+      const x = peek();
+      if (!x) throw new Error('Запись оборвалась');
+      if (x.k === 'num') { p++; return x.v; }
+      if (x.k === 'inf') { p++; return Infinity; }
+      if (x.k === '(') { p++; const v = expr(); eat(')'); return v; }
+      if (x.k === 'root') { p++; const a = power(); return x.n === 2 ? Math.sqrt(a) : Math.sign(a) * Math.pow(Math.abs(a), 1 / x.n); }
+      if (x.k === 'fn') { p++; return x.f(power()); }
+      if (x.k === 'log') { p++; const base = primary(); const arg = power(); return Math.log(arg) / Math.log(base); }
+      throw new Error('Ошибка в записи');
+    }
+    const v = expr();
+    if (p !== t.length) throw new Error('Лишние символы в записи');
+    if (Number.isNaN(v)) throw new Error('Выражение не имеет смысла');
+    return v;
+  }
+
+  // ================= 2. Виды ответов =================
+  // mode: 'num' — одно число; 'set' — несколько чисел через «;», порядок не важен (корни, значения a);
+  //       'seq' — несколько чисел через «;», порядок важен; 'int' — промежутки и точки через ∪; 'live' — проверяет репетитор.
+  const near = (a, b) => (a === b) || Math.abs(a - b) <= EPS * Math.max(1, Math.abs(a), Math.abs(b));
+  function parseList(s) {
+    const parts = normInput(s).replace(/^\{|\}$/g, '').split(';').map(x => x.trim()).filter(Boolean);
+    if (!parts.length) throw new Error('Пустой ответ');
+    return parts.map(evalExpr);
+  }
+  // промежутки -> канонический список отрезков [{a,b,la,rb}] (la/rb — входит ли конец)
+  function parseIntervals(s) {
+    const src = normInput(s).replace(/\s*([∪;{}()\[\]])\s*/g, '$1');
+    if (src === '∅' || src === '{}') return [];
+    const pieces = src.split('∪').filter(Boolean);
+    let segs = [];
+    for (const pc of pieces) {
+      if (pc[0] === '{') {
+        if (pc[pc.length - 1] !== '}') throw new Error('Не закрыта фигурная скобка');
+        parseList(pc).forEach(v => segs.push({ a: v, b: v, la: true, rb: true }));
+        continue;
+      }
+      const L = pc[0], R = pc[pc.length - 1];
+      if (!'(['.includes(L) || !')]'.includes(R)) throw new Error('Промежуток пишется в скобках: (a;b], [a;b) …');
+      const inner = pc.slice(1, -1);
+      const k = splitTop(inner);
+      if (k < 0) throw new Error('Концы промежутка разделяются «;»');
+      const a = evalExpr(inner.slice(0, k)), b = evalExpr(inner.slice(k + 1));
+      if (!(a < b)) throw new Error('Левый конец должен быть меньше правого');
+      segs.push({ a, b, la: L === '[' && isFinite(a), rb: R === ']' && isFinite(b) });
+    }
+    return canon(segs);
+  }
+  function splitTop(s) { let d = 0; for (let i = 0; i < s.length; i++) { const c = s[i]; if (c === '(' || c === '[') d++; else if (c === ')' || c === ']') d--; else if (c === ';' && d === 0) return i; } return -1; }
+  function canon(segs) {
+    segs.sort((x, y) => x.a - y.a || (x.la === y.la ? 0 : x.la ? -1 : 1));
+    const out = [];
+    for (const s of segs) {
+      const last = out[out.length - 1];
+      if (last && (s.a < last.b - EPS || (near(s.a, last.b) && (last.rb || s.la)))) {
+        if (s.b > last.b + EPS) { last.b = s.b; last.rb = s.rb; } else if (near(s.b, last.b)) last.rb = last.rb || s.rb;
+        if (near(s.a, last.a)) last.la = last.la || s.la;
+      } else out.push(Object.assign({}, s));
+    }
+    return out;
+  }
+  function sameIntervals(x, y) {
+    if (x.length !== y.length) return false;
+    return x.every((s, i) => near(s.a, y[i].a) && near(s.b, y[i].b) && s.la === y[i].la && s.rb === y[i].rb);
+  }
+
+  // given — ввод ученика, key — ключ из банка (колонка «Ключ автопроверки»), mode — вид ответа.
+  // Возвращает {ok, empty, error}. error — ученик написал что-то нечитаемое (засчитывается как неверно, но мы покажем подсказку).
+  function check(given, key, mode) {
+    const g = normInput(given);
+    if (g === '') return { ok: false, empty: true };
+    try {
+      if (mode === 'num') return { ok: near(evalExpr(g), evalExpr(key)) };
+      if (mode === 'set' || mode === 'seq') {
+        const a = parseList(g), b = parseList(key);
+        if (a.length !== b.length) return { ok: false };
+        if (mode === 'seq') return { ok: a.every((v, i) => near(v, b[i])) };
+        const A = a.slice().sort((p, q) => p - q), B = b.slice().sort((p, q) => p - q);
+        return { ok: A.every((v, i) => near(v, B[i])) };
+      }
+      if (mode === 'int') return { ok: sameIntervals(parseIntervals(g), parseIntervals(key)) };
+      return { ok: false, live: true };
+    } catch (e) { return { ok: false, error: e.message }; }
+  }
+  // Предпросмотр для поля ввода: что понял сайт (для живой отрисовки и подсказок)
+  function preview(given, mode) {
+    try {
+      if (mode === 'num') return { ok: true, value: evalExpr(given) };
+      if (mode === 'set' || mode === 'seq') return { ok: true, value: parseList(given) };
+      if (mode === 'int') return { ok: true, value: parseIntervals(given) };
+    } catch (e) { return { ok: false, error: e.message }; }
+    return { ok: true };
+  }
+
+  // ================= 3. Код результата =================
+  // Формат: E<версия>-<вариант><цель>-<состояния заданий><время><контроль>
+  // Пример: E1-C72-3F9K2A7QXH5
+  //  версия  — версия составов вариантов (меняем, если поменялись задания в вариантах);
+  //  вариант — A…E; цель — желаемый балл 0–100 (как есть, цифрами);
+  //  состояния — по каждому заданию 0 = не приступал, 1 = неверно, 2 = верно; упакованы в base-3 → base32;
+  //  время  — затраченные минуты / 5 (одна буква, до 155 мин); контроль — проверка опечаток.
+  const ALPHABET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ'; // без I L O U
+  function b32(n, len) { let s = ''; for (let i = 0; i < len; i++) { s = ALPHABET[Number(n & 31n)] + s; n >>= 5n; } if (n > 0n) throw new Error('Переполнение'); return s; }
+  function fromB32(s) { let n = 0n; for (const ch of s) { const k = ALPHABET.indexOf(ch); if (k < 0) throw new Error('Неверный символ в коде: ' + ch); n = (n << 5n) | BigInt(k); } return n; }
+  function checkChar(str) { let sum = 0; for (let i = 0; i < str.length; i++) sum = (sum * 7 + str.charCodeAt(i)) % 32; return ALPHABET[sum]; }
+  const stateLen = n => Math.max(1, Math.ceil(n * Math.log2(3) / 5 - 1e-9));
+  function encode({ version, variant, goal, states, minutes }) {
+    if (!/^[A-E]$/.test(variant)) throw new Error('Вариант A–E');
+    goal = Math.max(0, Math.min(100, Math.round(goal)));
+    let n = 0n;
+    for (let i = states.length - 1; i >= 0; i--) n = n * 3n + BigInt(states[i]);
+    const t = ALPHABET[Math.max(0, Math.min(31, Math.round((minutes || 0) / 5)))];
+    const body = 'E' + version + '-' + variant + goal + '-' + b32(n, stateLen(states.length)) + t;
+    return body + checkChar(body);
+  }
+  // nTasks(version, variant) — сколько заданий в этом варианте (из файла составов)
+  function decode(code, nTasks) {
+    const c = String(code).trim().toUpperCase().replace(/\s/g, '').replace(/O/g, '0').replace(/[IL]/g, '1').replace(/[–—−]/g, '-');
+    const m = /^E(\d+)-([A-E])(\d{1,3})-([0-9A-Z]+)$/.exec(c);
+    if (!m) throw new Error('Код не похож на код пробника ЕГЭ');
+    if (checkChar(c.slice(0, -1)) !== c.slice(-1)) throw new Error('Код введён с ошибкой, проверьте символы');
+    const version = Number(m[1]), variant = m[2], goal = Number(m[3]);
+    const n = nTasks(version, variant);
+    const tail = m[4].slice(0, -1);
+    const L = stateLen(n);
+    if (tail.length !== L + 1) throw new Error('Длина кода не совпадает с вариантом ' + variant);
+    let x = fromB32(tail.slice(0, L));
+    const states = [];
+    for (let i = 0; i < n; i++) { states.push(Number(x % 3n)); x /= 3n; }
+    const minutes = ALPHABET.indexOf(tail[L]) * 5;
+    return { version, variant, goal, states, minutes };
+  }
+
+  return { evalExpr, parseList, parseIntervals, check, preview, encode, decode, normInput };
+});
+
+</script>
+<script>
+// Маршрут ЕГЭ (профиль): карта знаний по подтипам, порядок тем, план занятий и прогноз балла.
+// Чистая логика без DOM: window.RouteEGE в браузере, module.exports в Node.
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.RouteEGE = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+
+  // ---- шкала перевода (ориентир) ----
+  // Официальной шкалы 2027 ещё нет. Берём шкалу 2025 (32 первичных) и растягиваем на 33 первичных балла 2027.
+  const SCALE_2025 = [0, 6, 11, 17, 22, 27, 34, 40, 46, 52, 58, 64, 70, 72, 74, 76, 78, 80, 82, 84, 86, 88, 90, 92, 94, 95, 96, 97, 98, 99, 100, 100, 100];
+  const MAX_PRIMARY = 33;
+  function toTest(primary) {
+    const x = Math.max(0, Math.min(MAX_PRIMARY, primary)) * 32 / MAX_PRIMARY;
+    const i = Math.floor(x), f = x - i;
+    if (i >= 32) return 100;
+    return Math.round(SCALE_2025[i] + f * (SCALE_2025[i + 1] - SCALE_2025[i]));
+  }
+  function needPrimary(test) { for (let p = 0; p <= MAX_PRIMARY; p++) if (toTest(p) >= test) return p; return MAX_PRIMARY; }
+
+  // ---- граф подтипов ----
+  function index(subs) { return Object.fromEntries(subs.map(s => [s.id, s])); }
+  function ancestors(id, by, acc = new Set()) { ((by[id] && by[id].prereq) || []).forEach(p => { if (!acc.has(p)) { acc.add(p); ancestors(p, by, acc); } }); return acc; }
+  function depthMap(subs) {
+    const by = index(subs), memo = {};
+    const d = id => { if (memo[id] != null) return memo[id]; memo[id] = 0; const p = (by[id] && by[id].prereq) || []; return (memo[id] = p.length ? 1 + Math.max(...p.map(d)) : 0); };
+    subs.forEach(s => d(s.id)); return memo;
+  }
+
+  // ---- 1. разбор пробника ----
+  // states: 0 = не приступал, 1 = неверно, 2 = верно (по порядку заданий варианта)
+  function analyze(ids, states, tasks, subs) {
+    const per = {}; // подтип -> {ok, bad, skip}
+    ids.forEach((tid, i) => {
+      const s = tasks[tid].sub; per[s] = per[s] || { ok: 0, bad: 0, skip: 0 };
+      per[s][['skip', 'bad', 'ok'][states[i]]]++;
+    });
+    const byNum = {};
+    ids.forEach((tid, i) => {
+      const n = tasks[tid].num; byNum[n] = byNum[n] || { num: n, ok: 0, bad: 0, skip: 0, total: 0 };
+      byNum[n].total++; byNum[n][['skip', 'bad', 'ok'][states[i]]]++;
+    });
+    const site = {};
+    Object.entries(per).forEach(([s, v]) => {
+      site[s] = v.ok && !v.bad && !v.skip ? 'know' : v.ok ? 'partial' : v.bad ? 'gap' : 'skip';
+    });
+    const ok = states.filter(x => x === 2).length;
+    return { site, perSub: per, byNum: Object.values(byNum).sort((a, b) => a.num - b.num), ok, bad: states.filter(x => x === 1).length, skip: states.filter(x => x === 0).length, total: states.length };
+  }
+
+  // ---- 2. карта знаний ----
+  // Источники по старшинству: отметка репетитора > пробник > вывод («знает тему» => знает и то, на чём она стоит).
+  // Статусы: know, partial, gap, skip (не приступал — считаем дырой, но помечаем), unknown.
+  function buildMap(subs, site, marks) {
+    const by = index(subs), st = {};
+    subs.forEach(s => { st[s.id] = { status: 'unknown', source: null, site: site[s.id] || null, tutor: (marks || {})[s.id] || null }; });
+    subs.forEach(s => { const x = st[s.id]; if (x.tutor) { x.status = x.tutor; x.source = 'tutor'; } else if (x.site) { x.status = x.site; x.source = 'site'; } });
+    subs.forEach(s => {
+      if (st[s.id].status !== 'know') return;
+      ancestors(s.id, by).forEach(a => { if (st[a].status === 'unknown') { st[a].status = 'know'; st[a].source = 'inferred'; } });
+    });
+    return st;
+  }
+
+  // ---- 3. какие номера брать под цель ----
+  // Порядок, в котором обычно набирают баллы, и сколько баллов номера реально «приносит» после подготовки.
+  const ORDER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 15, 18, 19, 20];
+  const POINTS = { 14: 2, 15: 3, 16: 2, 17: 2, 18: 3, 19: 4, 20: 4 };
+  const pts = n => POINTS[n] || 1;
+  const YIELD = n => n <= 12 ? 0.9 : n === 13 ? 0.8 : [14, 16, 17].includes(n) ? 0.75 : [15, 18].includes(n) ? 0.6 : 0.5;
+  function numbersForGoal(goal) {
+    const need = needPrimary(goal) + 1; // запас в 1 первичный балл на ошибки
+    const take = []; let exp = 0;
+    for (const n of ORDER) { if (exp >= need) break; take.push(n); exp += pts(n) * YIELD(n); }
+    return { numbers: take, need: need - 1, expectedMax: Math.round(exp * 10) / 10 };
+  }
+
+  // ---- 4. прогноз ----
+  // Вероятность решить номер = средняя «готовность» его подтипов, взвешенная по числу прототипов (что чаще попадается).
+  const READY = { know: 0.9, partial: 0.5, gap: 0, skip: 0 };
+  // Доля решённого среди проверенных напрямую подтипов (пробник или репетитор), отдельно по частям.
+  // Непроверенный подтип части 2 без единой проверки части 2 считаем нерешаемым.
+  function pUnknownOf(st, subs, part) {
+    let k = 0, n = 0;
+    subs.forEach(s => { const x = st[s.id]; if (s.service || x.status === 'unknown' || x.source === 'inferred' || (part && s.part !== part)) return; n++; if (x.status === 'know') k++; else if (x.status === 'partial') k += 0.5; });
+    if (!n) return part === 2 ? 0 : 0.3;
+    return Math.max(0.05, Math.min(0.8, k / n));
+  }
+  function forecast(subs, st, after, learned) {
+    const L = learned || { 1: 0.85, 2: 0.65 };
+    // after: Set подтипов, которые будут пройдены по плану (для «после плана»), иначе — «сейчас»
+    const by = index(subs), PU = { 1: pUnknownOf(st, subs, 1), 2: pUnknownOf(st, subs, 2) };
+    const nums = {};
+    subs.filter(s => !s.service).forEach(s => {
+      const x = st[s.id].status;
+      let r = x === 'unknown' ? ([...ancestors(s.id, by)].some(a => ['gap', 'skip'].includes(st[a].status)) ? 0 : PU[s.part] * 0.9) : READY[x];
+      if (after && after.has(s.id)) r = Math.max(r, L[s.part]);
+      const w = Math.max(1, s.protos);
+      nums[s.num] = nums[s.num] || { w: 0, r: 0 }; nums[s.num].w += w; nums[s.num].r += w * r;
+    });
+    let primary = 0; const perNum = {};
+    Object.entries(nums).forEach(([n, v]) => { const p = v.r / v.w; perNum[n] = p; primary += p * pts(+n); });
+    return { primary: Math.round(primary * 10) / 10, test: toTest(primary), perNum };
+  }
+
+  // ---- 5. план занятий ----
+  // Два режима (видит только репетитор):
+  //  standard — стабильная подготовка: почти все подтипы выбранных номеров, закрепление 30%, срез раз в 5 недель, больше вариантов;
+  //  express  — экспресс: в каждом номере только самые частые подтипы (~75% прототипов), темы — «типовой прототип» (60% времени),
+  //             закрепление 15%, срез раз в 6 недель, номера берутся строго в рамках занятий до экзамена.
+  const MODES = {
+    standard: { name: 'Стандарт', cover: 0.95, mult: 1, review: 0.3, cut: 5, margin: 2, fitBudget: true, learned: { 1: 0.85, 2: 0.65 } },
+    express: { name: 'Экспресс', cover: 0.75, mult: 0.6, review: 0.15, cut: 6, margin: 1, fitBudget: true, learned: { 1: 0.8, 2: 0.55 } }
+  };
+  function variantsFor(goal, mode) { const v = goal >= 90 ? 10 : goal >= 75 ? 8 : goal >= 60 ? 6 : 4; return mode === 'express' ? Math.min(v, 6) : v; }
+
+  function plan(subs, st, cfg) {
+    let P = planOnce(subs, st, cfg, 0);
+    for (let k = 1; k <= 6 && P.overflow.length; k++) P = planOnce(subs, st, cfg, P.overflow.length + k);
+    return P;
+  }
+  function planOnce(subs, st, cfg, cut0) {
+    const by = index(subs), depth = depthMap(subs);
+    const modeKey = MODES[cfg.mode] ? cfg.mode : 'standard', M = MODES[modeKey];
+    const lessonMin = cfg.lessonMin || 60, perWeek = cfg.perWeek || 2, weeks = cfg.weeks || 30;
+    const N = weeks * perWeek;
+    const cutEvery = cfg.cutEvery || M.cut;
+    let V = Math.max(0, Math.min(variantsFor(cfg.goal, modeKey), Math.floor(N * 0.25 / 2)));
+    const nCuts = Math.floor((N - 2 * V) / (cutEvery * perWeek));
+    const budget = Math.max(0, Math.floor((N - 2 * V - nCuts) / (1 + M.review)) - (cut0 || 0)); // сколько занятий остаётся на новые темы
+    const PU = { 1: pUnknownOf(st, subs, 1), 2: pUnknownOf(st, subs, 2) };
+    const isHole = id => ['gap', 'skip'].includes(st[id].status);
+    const underGap = id => [...ancestors(id, by)].some(isHole);
+    const minutesOf = s => {
+      const x = st[s.id].status;
+      const f = x === 'gap' || x === 'skip' ? 1 : x === 'partial' ? 0.5 : (underGap(s.id) ? 1 : Math.max(0.3, 1 - PU[s.part]));
+      return Math.max(15, Math.round(s.lessons * lessonMin * M.mult * f / 5) * 5);
+    };
+    // что брать в номере: самые частые подтипы до доли cover (по числу прототипов), + служебный подтип номера
+    const nums = [...new Set(subs.map(s => s.num))];
+    const pack = {};
+    nums.forEach(n => {
+      const all = subs.filter(s => s.num === n && !s.service).sort((a, b) => b.protos - a.protos || a.id.localeCompare(b.id, 'ru', { numeric: true }));
+      const tot = all.reduce((a, s) => a + Math.max(1, s.protos), 0);
+      let cum = 0; const take = [];
+      for (const s of all) { if (cum / tot >= M.cover) break; cum += Math.max(1, s.protos); take.push(s); }
+      const need = take.filter(s => st[s.id].status !== 'know');
+      const svc = subs.filter(s => s.num === n && s.service && st[s.id].status !== 'know');
+      const ids = new Set([...need, ...(need.length ? svc : [])].map(s => s.id));
+      // дыры в пререквизитах из других номеров подтягиваем в план
+      [...ids].forEach(id => ancestors(id, by).forEach(a => { if (st[a].status !== 'know' && (isHole(a) || st[a].status === 'partial' || by[a].service)) ids.add(a); }));
+      pack[n] = ids;
+    });
+    const now = forecast(subs, st, null);
+    const costOf = ids => [...ids].reduce((a, id) => a + minutesOf(by[id]), 0) / lessonMin;
+    // жадный выбор номеров: больше баллов за занятие — раньше
+    const target = needPrimary(cfg.goal) + M.margin;
+    const chosen = new Set(), chosenNums = [];
+    let primary = now.primary, used = 0;
+    for (let guard = 0; guard < 25; guard++) { // берём номера, пока хватает занятий: сначала добираем цель, потом — запас сверху
+      let best = null;
+      nums.forEach(n => {
+        if (chosenNums.includes(n) || !pack[n].size) return;
+        const ids = new Set([...chosen, ...pack[n]]);
+        const add = costOf(new Set([...pack[n]].filter(id => !chosen.has(id))));
+        const gain = forecast(subs, st, ids, M.learned).primary - primary;
+        if (gain <= 0.05) return;
+        if (M.fitBudget && used + add > budget) return;
+        const eff = gain / Math.max(0.5, add);
+        if (!best || eff > best.eff) best = { n, eff, gain, add };
+      });
+      if (!best) break;
+      chosenNums.push(best.n); pack[best.n].forEach(id => chosen.add(id)); used += best.add; primary += best.gain;
+    }
+    const items = [...chosen].map(id => { const s = by[id]; return { id, name: s.name, num: s.num, status: st[id].status, minutes: minutesOf(s), depth: depth[id] }; });
+    // Порядок: сначала дыры, потом «частично», потом непроверенное — но тема никогда не идёт раньше своих пререквизитов из плана.
+    const ordIx = n => ORDER.indexOf(n), RANKST = { gap: 0, skip: 0, partial: 1, unknown: 2 };
+    const inPlan = new Set(items.map(i => i.id)), done = new Set(), sorted = [];
+    const prio = (a, b) => RANKST[a.status] - RANKST[b.status] || ordIx(a.num) - ordIx(b.num) || a.depth - b.depth || a.id.localeCompare(b.id, 'ru', { numeric: true });
+    let pool = items.slice();
+    while (pool.length) {
+      const ready = pool.filter(it => [...ancestors(it.id, by)].every(a => !inPlan.has(a) || done.has(a)));
+      const pick = (ready.length ? ready : pool).sort(prio)[0];
+      sorted.push(pick); done.add(pick.id); pool = pool.filter(x => x !== pick);
+    }
+    items.splice(0, items.length, ...sorted);
+    // нарезка по занятиям
+    const core = []; let cur = null;
+    items.forEach(it => { let rest = it.minutes; while (rest > 0) { if (!cur || cur.left <= 0) { cur = { left: lessonMin, parts: [] }; core.push(cur); } const t = Math.min(rest, cur.left); rest -= t; cur.left -= t; cur.parts.push({ id: it.id, name: it.name, status: it.status, minutes: t, cont: rest > 0, done: rest === 0 }); } });
+    const varStart = N - 2 * V + 1;
+    const out = [], revQ = [], revAfter = (cfg.reviewAfterWeeks || 3) * perWeek;
+    const push = (kind, label, parts) => { const n = out.length + 1; out.push({ n, week: Math.ceil(n / perWeek), kind, label, parts: parts || [] }); };
+    let guard = 0;
+    while (guard++ < 2000) {
+      const s = out.length + 1;
+      if (s >= varStart) break;
+      const w = Math.ceil(s / perWeek);
+      if (s % perWeek === 0 && w % cutEvery === 0) { push('cut', 'Срез по пройденному + отчёт родителю'); continue; }
+      const due = revQ.filter(r => r.due <= s);
+      if (due.reduce((a, r) => a + r.minutes, 0) >= lessonMin || (!core.length && revQ.length)) {
+        const parts = []; let room = lessonMin;
+        for (let i = 0; i < revQ.length && room > 0;) { const r = revQ[i]; if (core.length && r.due > s) { i++; continue; } const m = Math.min(r.minutes, room); parts.push({ id: r.id, name: r.name, status: 'review', minutes: m }); room -= m; r.minutes -= m; if (r.minutes <= 0) revQ.splice(i, 1); else i++; }
+        if (parts.length) { push('review', 'Закрепление', parts); continue; }
+      }
+      if (core.length) {
+        const c = core.shift(); push('core', 'Новая тема', c.parts);
+        c.parts.forEach(p => { if (p.done) { const it = items.find(i => i.id === p.id); revQ.push({ id: p.id, name: p.name, minutes: Math.max(10, Math.round(it.minutes * M.review / 5) * 5), due: s + revAfter }); } });
+        continue;
+      }
+      push('deep', 'Отработка номеров по цели: смешанные задания на время');
+    }
+    for (let v = 1; v <= V; v++) { push('variant', `Полный вариант ЕГЭ №${v} на время`); push('variant', `Разбор варианта №${v}`); }
+    const placed = new Set(); out.forEach(l => l.parts.forEach(p => { if (p.done) placed.add(p.id); }));
+    const overflow = core.map(c => c.parts);
+    const after = forecast(subs, st, placed, M.learned), full = forecast(subs, st, new Set(items.map(i => i.id)), M.learned);
+    const kinds = {}; out.forEach(l => { kinds[l.kind] = (kinds[l.kind] || 0) + 1; });
+    const sel = { numbers: chosenNums.slice().sort((a, b) => a - b), need: needPrimary(cfg.goal), target, expected: Math.round(primary * 10) / 10 };
+    return { mode: modeKey, modeName: M.name, sel, items, lessons: out, kinds, overflow, slots: N, budget, needLessons: Math.ceil(used), forecast: { now, after, full }, variants: V };
+  }
+
+  // Подсказка для репетитора: при каком темпе цель берётся в каждом режиме (1–4 занятия в неделю)
+  function advise(subs, st, cfg) {
+    const res = {};
+    ['standard', 'express'].forEach(m => {
+      res[m] = [1, 2, 3, 4].map(pw => { const P = plan(subs, st, Object.assign({}, cfg, { mode: m, perWeek: pw })); return { pw, after: P.forecast.after.test, fits: !P.overflow.length, reach: P.forecast.after.test >= cfg.goal, lessons: P.lessons.length }; });
+    });
+    const firstReach = m => (res[m].find(x => x.reach && x.fits) || null);
+    // реально достижимая цель при текущем темпе (лучшее из режимов)
+    const cur = cfg.perWeek || 2;
+    const best = Math.max(res.standard[cur - 1].after, res.express[cur - 1].after);
+    return { table: res, standard: firstReach('standard'), express: firstReach('express'), realisticNow: best };
+  }
+
+  // ---- 6. с чего начинать ----
+  function startList(subs, st, numbers) {
+    const by = index(subs), inGoal = new Set(numbers);
+    return subs.filter(s => inGoal.has(s.num) && ['gap', 'skip', 'partial'].includes(st[s.id].status))
+      .map(s => ({ id: s.id, name: s.name, num: s.num, status: st[s.id].status, blockedBy: [...ancestors(s.id, by)].filter(a => ['gap', 'skip'].includes(st[a].status)) }))
+      .sort((a, b) => a.blockedBy.length - b.blockedBy.length || ORDER.indexOf(a.num) - ORDER.indexOf(b.num) || a.id.localeCompare(b.id, 'ru', { numeric: true }));
+  }
+
+
+  // ---- 7. задания на пробное занятие ----
+  // bank: [{id, sub, num, sec, lvl, link}], opts: {numbers, seen:Set, budgetMin, speed}
+  // 1) дыры без дыр под ними — по одному самому лёгкому заданию: не знает или ошибся по невнимательности?
+  // 2) разведка: непроверенные подтипы номеров под цель, у которых всё нужное под ними уже известно; сначала самые «весомые»
+  //    (чаще встречаются на экзамене и дают больше баллов), задание не сложнее 2-го уровня;
+  // 3) если время осталось — подтвердить остальные дыры и заглянуть на номер выше цели.
+  function pickLesson(subs, st, bank, opts) {
+    const by = index(subs), seen = opts.seen || new Set(), budget = (opts.budgetMin || 45) * 60, speed = opts.speed || 1;
+    const inGoal = new Set(opts.numbers || []);
+    const byS = {}; bank.forEach(b => { if (!seen.has(b.id)) (byS[b.sub] = byS[b.sub] || []).push(b); });
+    Object.values(byS).forEach(a => a.sort((x, y) => x.lvl - y.lvl || x.sec - y.sec));
+    const numW = {}; subs.forEach(s => { if (!s.service) numW[s.num] = (numW[s.num] || 0) + Math.max(1, s.protos); });
+    const weight = s => Math.max(1, s.protos) / numW[s.num] * pts(s.num);
+    const known = id => ['know', 'partial'].includes(st[id].status);
+    const picks = [], taken = new Set(); let used = 0;
+    const add = (s, reason, maxLvl) => {
+      if (taken.has(s.id) || s.service) return;
+      const c = (byS[s.id] || []).find(b => !maxLvl || b.lvl <= maxLvl) || (byS[s.id] || [])[0];
+      if (!c) { if (reason === 'дыра') { taken.add(s.id); picks.push({ sub: s.id, task: null, reason, minutes: 0 }); } return; }
+      const t = Math.round(c.sec * speed);
+      if (used + t > budget) return;
+      used += t; taken.add(s.id); picks.push({ sub: s.id, task: c.id, reason, minutes: Math.max(1, Math.round(t / 60)) });
+    };
+    startList(subs, st, [...inGoal]).filter(x => !x.blockedBy.length).forEach(x => add(by[x.id], 'дыра', 0));
+    subs.filter(s => inGoal.has(s.num) && !s.service && st[s.id].status === 'unknown' && (s.prereq || []).every(p => known(p) || by[p].service))
+      .sort((a, b) => weight(b) - weight(a)).forEach(s => add(s, 'разведка', 2));
+    startList(subs, st, [...inGoal]).filter(x => x.blockedBy.length).forEach(x => add(by[x.id], 'дыра', 0));
+    const next = ORDER.find(n => !inGoal.has(n));
+    if (next) subs.filter(s => s.num === next && !s.service).sort((a, b) => b.protos - a.protos).slice(0, 2).forEach(s => add(s, 'выше цели', 0));
+    return { picks, minutes: Math.round(used / 60) };
+  }
+
+  return { pickLesson, toTest, needPrimary, numbersForGoal, analyze, buildMap, forecast, plan, advise, startList, ancestors, MAX_PRIMARY, pts, MODES };
+});
+
+</script>
+<script>
+const DATA = {"version": 1, "variants": {"A": {"ids": ["D1.1-1", "D1.1-2", "D2.1-1", "D2.1-2", "D3.2-1", "D3.2-2", "D4.1-1", "D4.1-2", "D5.1-1", "D5.1-2", "D6.1-1", "D6.1-2", "D7.5-1", "D7.5-2", "D8.4-1", "D8.4-2", "D9.3-1", "D9.3-2", "D10.2-1", "D10.2-2", "D11.1-1", "D11.1-2", "D12.2-1", "D12.2-2"], "limit": 60, "goal": "до 60"}, "B": {"ids": ["D1.1-1", "D1.5-1", "D2.1-1", "D2.1-2", "D3.2-1", "D3.7-1", "D4.1-1", "D4.1-2", "D5.1-1", "D5.2-2", "D6.1-1", "D6.1-2", "D7.3-1", "D7.5-1", "D8.4-2", "D8.7-1", "D9.2-1", "D9.3-1", "D10.2-1", "D10.5-1", "D11.1-2", "D11.2-1", "D12.2-1", "D12.5-1", "D13.1-1", "D13.2-1", "D14.5-1", "D16.3-2"], "limit": 70, "goal": "60–75, вторую часть не решал"}, "C": {"ids": ["D1.3-2", "D1.9-2", "D2.1-2", "D3.6-1", "D3.10-1", "D4.1-2", "D5.1-2", "D6.1-1", "D7.6-1", "D8.6-1", "D8.9-1", "D9.3-2", "D9.4-1", "D10.6-1", "D11.4-1", "D11.5-2", "D12.6-1", "D12.7-1", "D13.2-1", "D14.1-1", "D16.5-1", "D17.1-2"], "limit": 75, "goal": "60–75, решаю №14–16"}, "D": {"ids": ["D1.8-1", "D2.1-1", "D3.10-2", "D4.1-1", "D5.2-1", "D6.1-1", "D7.3-2", "D8.8-1", "D8.11-1", "D9.4-2", "D10.4-2", "D11.2-1", "D12.5-2", "D12.7-1", "D13.1-2", "D13.2-2", "D14.8-1", "D16.7-2", "D17.1-1"], "limit": 85, "goal": "75–90"}, "E": {"ids": ["D1.9-2", "D2.1-2", "D3.10-1", "D4.1-2", "D5.2-2", "D6.1-2", "D7.6-2", "D8.9-2", "D8.11-2", "D9.3-1", "D10.8-2", "D11.4-2", "D12.5-1", "D12.7-2", "D13.2-2", "D14.13-2", "D16.15-1", "D17.1-1", "D19.1-1"], "limit": 95, "goal": "90+"}}, "tasks": {"D1.1-1": {"num": 1, "sub": "1.1"}, "D1.1-2": {"num": 1, "sub": "1.1"}, "D2.1-1": {"num": 2, "sub": "2.1"}, "D2.1-2": {"num": 2, "sub": "2.1"}, "D3.2-1": {"num": 3, "sub": "3.2"}, "D3.2-2": {"num": 3, "sub": "3.2"}, "D4.1-1": {"num": 4, "sub": "4.1"}, "D4.1-2": {"num": 4, "sub": "4.1"}, "D5.1-1": {"num": 5, "sub": "5.1"}, "D5.1-2": {"num": 5, "sub": "5.1"}, "D6.1-1": {"num": 6, "sub": "6.1"}, "D6.1-2": {"num": 6, "sub": "6.1"}, "D7.5-1": {"num": 7, "sub": "7.5"}, "D7.5-2": {"num": 7, "sub": "7.5"}, "D8.4-1": {"num": 8, "sub": "8.4"}, "D8.4-2": {"num": 8, "sub": "8.4"}, "D9.3-1": {"num": 9, "sub": "9.3"}, "D9.3-2": {"num": 9, "sub": "9.3"}, "D10.2-1": {"num": 10, "sub": "10.2"}, "D10.2-2": {"num": 10, "sub": "10.2"}, "D11.1-1": {"num": 11, "sub": "11.1"}, "D11.1-2": {"num": 11, "sub": "11.1"}, "D12.2-1": {"num": 12, "sub": "12.2"}, "D12.2-2": {"num": 12, "sub": "12.2"}, "D1.5-1": {"num": 1, "sub": "1.5"}, "D3.7-1": {"num": 3, "sub": "3.7"}, "D5.2-2": {"num": 5, "sub": "5.2"}, "D7.3-1": {"num": 7, "sub": "7.3"}, "D8.7-1": {"num": 8, "sub": "8.7"}, "D9.2-1": {"num": 9, "sub": "9.2"}, "D10.5-1": {"num": 10, "sub": "10.5"}, "D11.2-1": {"num": 11, "sub": "11.2"}, "D12.5-1": {"num": 12, "sub": "12.5"}, "D13.1-1": {"num": 13, "sub": "13.1"}, "D13.2-1": {"num": 13, "sub": "13.2"}, "D14.5-1": {"num": 14, "sub": "14.5"}, "D16.3-2": {"num": 16, "sub": "16.3"}, "D1.3-2": {"num": 1, "sub": "1.3"}, "D1.9-2": {"num": 1, "sub": "1.9"}, "D3.6-1": {"num": 3, "sub": "3.6"}, "D3.10-1": {"num": 3, "sub": "3.10"}, "D7.6-1": {"num": 7, "sub": "7.6"}, "D8.6-1": {"num": 8, "sub": "8.6"}, "D8.9-1": {"num": 8, "sub": "8.9"}, "D9.4-1": {"num": 9, "sub": "9.4"}, "D10.6-1": {"num": 10, "sub": "10.6"}, "D11.4-1": {"num": 11, "sub": "11.4"}, "D11.5-2": {"num": 11, "sub": "11.5"}, "D12.6-1": {"num": 12, "sub": "12.6"}, "D12.7-1": {"num": 12, "sub": "12.7"}, "D14.1-1": {"num": 14, "sub": "14.1"}, "D16.5-1": {"num": 16, "sub": "16.5"}, "D17.1-2": {"num": 17, "sub": "17.1"}, "D1.8-1": {"num": 1, "sub": "1.8"}, "D3.10-2": {"num": 3, "sub": "3.10"}, "D5.2-1": {"num": 5, "sub": "5.2"}, "D7.3-2": {"num": 7, "sub": "7.3"}, "D8.8-1": {"num": 8, "sub": "8.8"}, "D8.11-1": {"num": 8, "sub": "8.11"}, "D9.4-2": {"num": 9, "sub": "9.4"}, "D10.4-2": {"num": 10, "sub": "10.4"}, "D12.5-2": {"num": 12, "sub": "12.5"}, "D13.1-2": {"num": 13, "sub": "13.1"}, "D13.2-2": {"num": 13, "sub": "13.2"}, "D14.8-1": {"num": 14, "sub": "14.8"}, "D16.7-2": {"num": 16, "sub": "16.7"}, "D17.1-1": {"num": 17, "sub": "17.1"}, "D7.6-2": {"num": 7, "sub": "7.6"}, "D8.9-2": {"num": 8, "sub": "8.9"}, "D8.11-2": {"num": 8, "sub": "8.11"}, "D10.8-2": {"num": 10, "sub": "10.8"}, "D11.4-2": {"num": 11, "sub": "11.4"}, "D12.7-2": {"num": 12, "sub": "12.7"}, "D14.13-2": {"num": 14, "sub": "14.13"}, "D16.15-1": {"num": 16, "sub": "16.15"}, "D19.1-1": {"num": 19, "sub": "19.1"}}, "bank": [{"id": "D1.1-1", "sub": "1.1", "num": 1, "link": "https://math-ege.sdamgia.ru/problem?id=27239", "ans": "0,5", "sec": 60, "lvl": 1}, {"id": "D1.1-2", "sub": "1.1", "num": 1, "link": "https://math-ege.sdamgia.ru/problem?id=27242", "ans": "7", "sec": 90, "lvl": 2}, {"id": "D1.2-1", "sub": "1.2", "num": 1, "link": "https://math-ege.sdamgia.ru/problem?id=27285", "ans": "5", "sec": 60, "lvl": 1}, {"id": "D1.2-2", "sub": "1.2", "num": 1, "link": "https://math-ege.sdamgia.ru/problem?id=27287", "ans": "8", "sec": 45, "lvl": 1}, {"id": "D1.3-1", "sub": "1.3", "num": 1, "link": "https://math-ege.sdamgia.ru/problem?id=27592", "ans": "1", "sec": 60, "lvl": 1}, {"id": "D1.3-2", "sub": "1.3", "num": 1, "link": "https://math-ege.sdamgia.ru/problem?id=27743", "ans": "62", "sec": 45, "lvl": 1}, {"id": "D1.4-1", "sub": "1.4", "num": 1, "link": "https://math-ege.sdamgia.ru/problem?id=27582", "ans": "0,5", "sec": 40, "lvl": 1}, {"id": "D1.4-2", "sub": "1.4", "num": 1, "link": "https://math-ege.sdamgia.ru/problem?id=27603", "ans": "18", "sec": 60, "lvl": 1}, {"id": "D1.5-1", "sub": "1.5", "num": 1, "link": "https://math-ege.sdamgia.ru/problem?id=27440", "ans": "21", "sec": 75, "lvl": 2}, {"id": "D1.5-2", "sub": "1.5", "num": 1, "link": "https://math-ege.sdamgia.ru/problem?id=27443", "ans": "71", "sec": 90, "lvl": 2}, {"id": "D1.6-1", "sub": "1.6", "num": 1, "link": "https://math-ege.sdamgia.ru/problem?id=245385", "ans": "30", "sec": 60, "lvl": 1}, {"id": "D1.6-2", "sub": "1.6", "num": 1, "link": "https://math-ege.sdamgia.ru/problem?id=27859", "ans": "150", "sec": 60, "lvl": 2}, {"id": "D1.7-1", "sub": "1.7", "num": 1, "link": "https://math-ege.sdamgia.ru/problem?id=27862", "ans": "3", "sec": 75, "lvl": 2}, {"id": "D1.7-2", "sub": "1.7", "num": 1, "link": "https://math-ege.sdamgia.ru/problem?id=27877", "ans": "46", "sec": 45, "lvl": 2}, {"id": "D1.8-1", "sub": "1.8", "num": 1, "link": "https://math-ege.sdamgia.ru/problem?id=27625", "ans": "24", "sec": 60, "lvl": 2}, {"id": "D1.8-2", "sub": "1.8", "num": 1, "link": "https://math-ege.sdamgia.ru/problem?id=27907", "ans": "2", "sec": 45, "lvl": 1}, {"id": "D1.9-1", "sub": "1.9", "num": 1, "link": "https://math-ege.sdamgia.ru/problem?id=27871", "ans": "122", "sec": 40, "lvl": 1}, {"id": "D1.9-2", "sub": "1.9", "num": 1, "link": "https://math-ege.sdamgia.ru/problem?id=27873", "ans": "60", "sec": 75, "lvl": 2}, {"id": "D2.1-1", "sub": "2.1", "num": 2, "link": "https://math-ege.sdamgia.ru/problem?id=27664", "ans": "40", "sec": 45, "lvl": 1}, {"id": "D2.1-2", "sub": "2.1", "num": 2, "link": "https://math-ege.sdamgia.ru/problem?id=27708", "ans": "10", "sec": 45, "lvl": 1}, {"id": "D3.1-1", "sub": "3.1", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=27056", "ans": "24", "sec": 40, "lvl": 1}, {"id": "D3.1-2", "sub": "3.1", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=27081", "ans": "27", "sec": 30, "lvl": 1}, {"id": "D3.2-1", "sub": "3.2", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=27060", "ans": "3", "sec": 75, "lvl": 2}, {"id": "D3.2-2", "sub": "3.2", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=27077", "ans": "8", "sec": 45, "lvl": 1}, {"id": "D3.3-1", "sub": "3.3", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=245371", "ans": "5", "sec": 75, "lvl": 2}, {"id": "D3.3-2", "sub": "3.3", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=245373", "ans": "60", "sec": 90, "lvl": 2}, {"id": "D3.4-1", "sub": "3.4", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=25561", "ans": "76", "sec": 90, "lvl": 2}, {"id": "D3.4-2", "sub": "3.4", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=25601", "ans": "110", "sec": 90, "lvl": 2}, {"id": "D3.5-1", "sub": "3.5", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=25535", "ans": "40", "sec": 75, "lvl": 2}, {"id": "D3.5-2", "sub": "3.5", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=25553", "ans": "40", "sec": 75, "lvl": 2}, {"id": "D3.6-1", "sub": "3.6", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=27048", "ans": "5", "sec": 75, "lvl": 2}, {"id": "D3.6-2", "sub": "3.6", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=27062", "ans": "248", "sec": 75, "lvl": 2}, {"id": "D3.7-1", "sub": "3.7", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=902", "ans": "2", "sec": 60, "lvl": 1}, {"id": "D3.7-2", "sub": "3.7", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=904", "ans": "6", "sec": 60, "lvl": 1}, {"id": "D3.8-1", "sub": "3.8", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=27041", "ans": "4", "sec": 60, "lvl": 1}, {"id": "D3.8-2", "sub": "3.8", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=27043", "ans": "8", "sec": 45, "lvl": 1}, {"id": "D3.9-1", "sub": "3.9", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=4909", "ans": "300", "sec": 75, "lvl": 1}, {"id": "D3.9-2", "sub": "3.9", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=72025", "ans": "600", "sec": 75, "lvl": 1}, {"id": "D3.10-1", "sub": "3.10", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=27093", "ans": "1", "sec": 90, "lvl": 2}, {"id": "D3.10-2", "sub": "3.10", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=27120", "ans": "128", "sec": 75, "lvl": 2}, {"id": "D3.11-1", "sub": "3.11", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=27072", "ans": "4", "sec": 45, "lvl": 1}, {"id": "D3.11-2", "sub": "3.11", "num": 3, "link": "https://math-ege.sdamgia.ru/problem?id=27125", "ans": "12", "sec": 75, "lvl": 2}, {"id": "D4.1-1", "sub": "4.1", "num": 4, "link": "https://math-ege.sdamgia.ru/problem?id=1001", "ans": "0,95", "sec": 45, "lvl": 1}, {"id": "D4.1-2", "sub": "4.1", "num": 4, "link": "https://math-ege.sdamgia.ru/problem?id=282857", "ans": "0,92", "sec": 40, "lvl": 1}, {"id": "D5.1-1", "sub": "5.1", "num": 5, "link": "https://math-ege.sdamgia.ru/problem?id=320177", "ans": "0,75", "sec": 90, "lvl": 2}, {"id": "D5.1-2", "sub": "5.1", "num": 5, "link": "https://math-ege.sdamgia.ru/problem?id=320751", "ans": "0,6", "sec": 90, "lvl": 2}, {"id": "D5.2-1", "sub": "5.2", "num": 5, "link": "https://math-ege.sdamgia.ru/problem?id=508791", "ans": "0,11", "sec": 120, "lvl": 2}, {"id": "D5.2-2", "sub": "5.2", "num": 5, "link": "https://math-ege.sdamgia.ru/problem?id=508808", "ans": "0,64", "sec": 75, "lvl": 2}, {"id": "D6.1-1", "sub": "6.1", "num": 6, "link": "https://doc.fipi.ru/ege/demoversii-specifikacii-kodifikatory/2027/ma_11_2027.zip (демо профиль 2027, задание 6)", "ans": "55", "sec": 150, "lvl": 2}, {"id": "D6.1-2", "sub": "6.1", "num": 6, "link": "https://math-ege.sdamgia.ru/problem?id=509373", "ans": "0,5", "sec": 90, "lvl": 1}, {"id": "D6.2-1", "sub": "6.2", "num": 6, "link": "", "ans": "1,24", "sec": 150, "lvl": 2}, {"id": "D6.2-2", "sub": "6.2", "num": 6, "link": "", "ans": "6", "sec": 90, "lvl": 2}, {"id": "D6.3-1", "sub": "6.3", "num": 6, "link": "", "ans": "0,5", "sec": 90, "lvl": 2}, {"id": "D6.3-2", "sub": "6.3", "num": 6, "link": "", "ans": "0,3", "sec": 90, "lvl": 2}, {"id": "D7.1-1", "sub": "7.1", "num": 7, "link": "https://math-ege.sdamgia.ru/problem?id=26663", "ans": "-5", "sec": 60, "lvl": 1}, {"id": "D7.1-2", "sub": "7.1", "num": 7, "link": "https://math-ege.sdamgia.ru/problem?id=77369", "ans": "-6", "sec": 75, "lvl": 1}, {"id": "D7.2-1", "sub": "7.2", "num": 7, "link": "https://math-ege.sdamgia.ru/problem?id=77366", "ans": "5", "sec": 75, "lvl": 1}, {"id": "D7.2-2", "sub": "7.2", "num": 7, "link": "https://math-ege.sdamgia.ru/problem?id=77384", "ans": "0,3", "sec": 60, "lvl": 1}, {"id": "D7.3-1", "sub": "7.3", "num": 7, "link": "https://math-ege.sdamgia.ru/problem?id=26660", "ans": "87", "sec": 90, "lvl": 2}, {"id": "D7.3-2", "sub": "7.3", "num": 7, "link": "https://math-ege.sdamgia.ru/problem?id=26668", "ans": "-9", "sec": 120, "lvl": 2}, {"id": "D7.4-1", "sub": "7.4", "num": 7, "link": "https://math-ege.sdamgia.ru/problem?id=26651", "ans": "4", "sec": 60, "lvl": 1}, {"id": "D7.4-2", "sub": "7.4", "num": 7, "link": "https://math-ege.sdamgia.ru/problem?id=26653", "ans": "4", "sec": 75, "lvl": 1}, {"id": "D7.5-1", "sub": "7.5", "num": 7, "link": "https://math-ege.sdamgia.ru/problem?id=26647", "ans": "21", "sec": 60, "lvl": 1}, {"id": "D7.5-2", "sub": "7.5", "num": 7, "link": "https://math-ege.sdamgia.ru/problem?id=26649", "ans": "-12", "sec": 60, "lvl": 1}, {"id": "D7.6-1", "sub": "7.6", "num": 7, "link": "https://math-ege.sdamgia.ru/problem?id=77376", "ans": "-1", "sec": 90, "lvl": 2}, {"id": "D7.6-2", "sub": "7.6", "num": 7, "link": "https://math-ege.sdamgia.ru/problem?id=77377", "ans": "0,5", "sec": 90, "lvl": 2}, {"id": "D8.1-1", "sub": "8.1", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=77387", "ans": "8", "sec": 75, "lvl": 1}, {"id": "D8.1-2", "sub": "8.1", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=77390", "ans": "-136", "sec": 60, "lvl": 1}, {"id": "D8.2-1", "sub": "8.2", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=26797", "ans": "5", "sec": 75, "lvl": 1}, {"id": "D8.2-2", "sub": "8.2", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=26802", "ans": "6", "sec": 90, "lvl": 2}, {"id": "D8.3-1", "sub": "8.3", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=26739", "ans": "9", "sec": 60, "lvl": 1}, {"id": "D8.3-2", "sub": "8.3", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=26741", "ans": "1,5", "sec": 90, "lvl": 2}, {"id": "D8.4-1", "sub": "8.4", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=26813", "ans": "5", "sec": 75, "lvl": 1}, {"id": "D8.4-2", "sub": "8.4", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=26801", "ans": "0,25", "sec": 105, "lvl": 2}, {"id": "D8.5-1", "sub": "8.5", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=26736", "ans": "2", "sec": 45, "lvl": 1}, {"id": "D8.5-2", "sub": "8.5", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=26735", "ans": "33", "sec": 75, "lvl": 2}, {"id": "D8.6-1", "sub": "8.6", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=26842", "ans": "4", "sec": 90, "lvl": 2}, {"id": "D8.6-2", "sub": "8.6", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=26824", "ans": "5", "sec": 75, "lvl": 1}, {"id": "D8.7-1", "sub": "8.7", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=4491", "ans": "2", "sec": 60, "lvl": 1}, {"id": "D8.7-2", "sub": "8.7", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=26846", "ans": "-0,5", "sec": 75, "lvl": 2}, {"id": "D8.8-1", "sub": "8.8", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=77415", "ans": "22", "sec": 90, "lvl": 2}, {"id": "D8.8-2", "sub": "8.8", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=77417", "ans": "-4", "sec": 75, "lvl": 2}, {"id": "D8.9-1", "sub": "8.9", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=26775", "ans": "-3", "sec": 105, "lvl": 2}, {"id": "D8.9-2", "sub": "8.9", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=26777", "ans": "1", "sec": 105, "lvl": 2}, {"id": "D8.10-1", "sub": "8.10", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=26755", "ans": "6", "sec": 75, "lvl": 1}, {"id": "D8.10-2", "sub": "8.10", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=26756", "ans": "-24", "sec": 90, "lvl": 2}, {"id": "D8.11-1", "sub": "8.11", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=26781", "ans": "2", "sec": 105, "lvl": 2}, {"id": "D8.11-2", "sub": "8.11", "num": 8, "link": "https://math-ege.sdamgia.ru/problem?id=26782", "ans": "1", "sec": 105, "lvl": 2}, {"id": "D9.1-1", "sub": "9.1", "num": 9, "link": "https://math-ege.sdamgia.ru/problem?id=119975", "ans": "60", "sec": 75, "lvl": 1}, {"id": "D9.1-2", "sub": "9.1", "num": 9, "link": "https://math-ege.sdamgia.ru/problem?id=119977", "ans": "59", "sec": 90, "lvl": 1}, {"id": "D9.2-1", "sub": "9.2", "num": 9, "link": "https://math-ege.sdamgia.ru/problem?id=27503", "ans": "2", "sec": 75, "lvl": 1}, {"id": "D9.2-2", "sub": "9.2", "num": 9, "link": "https://math-ege.sdamgia.ru/problem?id=510384", "ans": "-0,25", "sec": 90, "lvl": 2}, {"id": "D9.3-1", "sub": "9.3", "num": 9, "link": "https://math-ege.sdamgia.ru/problem?id=27487", "ans": "4", "sec": 105, "lvl": 2}, {"id": "D9.3-2", "sub": "9.3", "num": 9, "link": "https://math-ege.sdamgia.ru/problem?id=27490", "ans": "44", "sec": 105, "lvl": 2}, {"id": "D9.4-1", "sub": "9.4", "num": 9, "link": "https://math-ege.sdamgia.ru/problem?id=323078", "ans": "7", "sec": 120, "lvl": 2}, {"id": "D9.4-2", "sub": "9.4", "num": 9, "link": "https://math-ege.sdamgia.ru/problem?id=323077", "ans": "10", "sec": 150, "lvl": 3}, {"id": "D10.1-1", "sub": "10.1", "num": 10, "link": "https://math-ege.sdamgia.ru/problem?id=27953", "ans": "25", "sec": 90, "lvl": 1}, {"id": "D10.1-2", "sub": "10.1", "num": 10, "link": "https://math-ege.sdamgia.ru/problem?id=27954", "ans": "5000", "sec": 90, "lvl": 1}, {"id": "D10.2-1", "sub": "10.2", "num": 10, "link": "https://math-ege.sdamgia.ru/problem?id=27955", "ans": "1", "sec": 90, "lvl": 1}, {"id": "D10.2-2", "sub": "10.2", "num": 10, "link": "https://math-ege.sdamgia.ru/problem?id=27956", "ans": "6", "sec": 120, "lvl": 2}, {"id": "D10.3-1", "sub": "10.3", "num": 10, "link": "https://math-ege.sdamgia.ru/problem?id=27970", "ans": "36", "sec": 120, "lvl": 2}, {"id": "D10.3-2", "sub": "10.3", "num": 10, "link": "https://math-ege.sdamgia.ru/problem?id=27971", "ans": "7", "sec": 150, "lvl": 2}, {"id": "D10.4-1", "sub": "10.4", "num": 10, "link": "https://math-ege.sdamgia.ru/problem?id=27982", "ans": "5000", "sec": 90, "lvl": 1}, {"id": "D10.4-2", "sub": "10.4", "num": 10, "link": "https://math-ege.sdamgia.ru/problem?id=27983", "ans": "180000", "sec": 120, "lvl": 2}, {"id": "D10.5-1", "sub": "10.5", "num": 10, "link": "https://math-ege.sdamgia.ru/problem?id=27990", "ans": "0,125", "sec": 120, "lvl": 2}, {"id": "D10.5-2", "sub": "10.5", "num": 10, "link": "https://math-ege.sdamgia.ru/problem?id=27991", "ans": "30", "sec": 90, "lvl": 1}, {"id": "D10.6-1", "sub": "10.6", "num": 10, "link": "https://math-ege.sdamgia.ru/problem?id=27994", "ans": "2", "sec": 120, "lvl": 2}, {"id": "D10.6-2", "sub": "10.6", "num": 10, "link": "https://math-ege.sdamgia.ru/problem?id=27996", "ans": "2", "sec": 120, "lvl": 2}, {"id": "D10.7-1", "sub": "10.7", "num": 10, "link": "https://math-ege.sdamgia.ru/problem?id=28008", "ans": "30", "sec": 120, "lvl": 2}, {"id": "D10.7-2", "sub": "10.7", "num": 10, "link": "https://math-ege.sdamgia.ru/problem?id=28009", "ans": "60", "sec": 120, "lvl": 2}, {"id": "D10.8-1", "sub": "10.8", "num": 10, "link": "https://math-ege.sdamgia.ru/problem?id=317096", "ans": "0,4", "sec": 120, "lvl": 2}, {"id": "D10.8-2", "sub": "10.8", "num": 10, "link": "https://math-ege.sdamgia.ru/problem?id=317097", "ans": "0,71", "sec": 150, "lvl": 3}, {"id": "D11.1-1", "sub": "11.1", "num": 11, "link": "https://math-ege.sdamgia.ru/problem?id=99565", "ans": "47088", "sec": 90, "lvl": 1}, {"id": "D11.1-2", "sub": "11.1", "num": 11, "link": "https://math-ege.sdamgia.ru/problem?id=99566", "ans": "20", "sec": 150, "lvl": 2}, {"id": "D11.2-1", "sub": "11.2", "num": 11, "link": "https://math-ege.sdamgia.ru/problem?id=26578", "ans": "32", "sec": 210, "lvl": 2}, {"id": "D11.2-2", "sub": "11.2", "num": 11, "link": "https://math-ege.sdamgia.ru/problem?id=26580", "ans": "10", "sec": 210, "lvl": 2}, {"id": "D11.3-1", "sub": "11.3", "num": 11, "link": "https://math-ege.sdamgia.ru/problem?id=99596", "ans": "20", "sec": 150, "lvl": 2}, {"id": "D11.3-2", "sub": "11.3", "num": 11, "link": "https://math-ege.sdamgia.ru/problem?id=99598", "ans": "59", "sec": 180, "lvl": 2}, {"id": "D11.4-1", "sub": "11.4", "num": 11, "link": "https://math-ege.sdamgia.ru/problem?id=26585", "ans": "3", "sec": 210, "lvl": 2}, {"id": "D11.4-2", "sub": "11.4", "num": 11, "link": "https://math-ege.sdamgia.ru/problem?id=26587", "ans": "11", "sec": 240, "lvl": 2}, {"id": "D11.5-1", "sub": "11.5", "num": 11, "link": "https://math-ege.sdamgia.ru/problem?id=26592", "ans": "10", "sec": 180, "lvl": 2}, {"id": "D11.5-2", "sub": "11.5", "num": 11, "link": "https://math-ege.sdamgia.ru/problem?id=26594", "ans": "25", "sec": 240, "lvl": 2}, {"id": "D11.6-1", "sub": "11.6", "num": 11, "link": "https://math-ege.sdamgia.ru/problem?id=99579", "ans": "8", "sec": 120, "lvl": 2}, {"id": "D11.6-2", "sub": "11.6", "num": 11, "link": "https://math-ege.sdamgia.ru/problem?id=99581", "ans": "57", "sec": 150, "lvl": 2}, {"id": "D12.1-1", "sub": "12.1", "num": 12, "link": "https://math-ege.sdamgia.ru/problem?id=508903", "ans": "-7", "sec": 120, "lvl": 2}, {"id": "D12.1-2", "sub": "12.1", "num": 12, "link": "https://math-ege.sdamgia.ru/problem?id=509197", "ans": "-5", "sec": 150, "lvl": 2}, {"id": "D12.2-1", "sub": "12.2", "num": 12, "link": "https://math-ege.sdamgia.ru/problem?id=508919", "ans": "26", "sec": 150, "lvl": 2}, {"id": "D12.2-2", "sub": "12.2", "num": 12, "link": "https://math-ege.sdamgia.ru/problem?id=508927", "ans": "48", "sec": 150, "lvl": 2}, {"id": "D12.3-1", "sub": "12.3", "num": 12, "link": "https://math-ege.sdamgia.ru/problem?id=508951", "ans": "0,75", "sec": 120, "lvl": 2}, {"id": "D12.3-2", "sub": "12.3", "num": 12, "link": "https://math-ege.sdamgia.ru/problem?id=508971", "ans": "0,15", "sec": 120, "lvl": 2}, {"id": "D12.4-1", "sub": "12.4", "num": 12, "link": "https://math-ege.sdamgia.ru/problem?id=509113", "ans": "6,5", "sec": 90, "lvl": 1}, {"id": "D12.4-2", "sub": "12.4", "num": 12, "link": "https://math-ege.sdamgia.ru/problem?id=509118", "ans": "1,96", "sec": 90, "lvl": 1}, {"id": "D12.5-1", "sub": "12.5", "num": 12, "link": "https://math-ege.sdamgia.ru/problem?id=509042", "ans": "4", "sec": 120, "lvl": 2}, {"id": "D12.5-2", "sub": "12.5", "num": 12, "link": "https://math-ege.sdamgia.ru/problem?id=509089", "ans": "61", "sec": 120, "lvl": 2}, {"id": "D12.6-1", "sub": "12.6", "num": 12, "link": "https://math-ege.sdamgia.ru/problem?id=509123", "ans": "1,5", "sec": 120, "lvl": 2}, {"id": "D12.6-2", "sub": "12.6", "num": 12, "link": "https://math-ege.sdamgia.ru/problem?id=509137", "ans": "2", "sec": 120, "lvl": 2}, {"id": "D12.7-1", "sub": "12.7", "num": 12, "link": "https://math-ege.sdamgia.ru/problem?id=509149", "ans": "6", "sec": 180, "lvl": 3}, {"id": "D12.7-2", "sub": "12.7", "num": 12, "link": "https://math-ege.sdamgia.ru/problem?id=509167", "ans": "-0,2", "sec": 180, "lvl": 3}, {"id": "D13.1-1", "sub": "13.1", "num": 13, "link": "https://math-ege.sdamgia.ru/problem?id=704682", "ans": "207,23", "sec": 240, "lvl": 2}, {"id": "D13.1-2", "sub": "13.1", "num": 13, "link": "https://math-ege.sdamgia.ru/problem?id=704683", "ans": "128205", "sec": 270, "lvl": 2}, {"id": "D13.2-1", "sub": "13.2", "num": 13, "link": "https://math-ege.sdamgia.ru/problem?id=513106", "ans": "22,5", "sec": 240, "lvl": 2}, {"id": "D13.2-2", "sub": "13.2", "num": 13, "link": "https://math-ege.sdamgia.ru/problem?id=517203", "ans": "17", "sec": 300, "lvl": 3}, {"id": "D14.1-1", "sub": "14.1", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=502094", "ans": "log_3 5", "sec": 600, "lvl": 2}, {"id": "D14.1-2", "sub": "14.1", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=516760", "ans": "log_2 5", "sec": 600, "lvl": 2}, {"id": "D14.2-1", "sub": "14.2", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=519423", "ans": "-1; 6-√22", "sec": 900, "lvl": 3}, {"id": "D14.2-2", "sub": "14.2", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=519424", "ans": "-5; (-1-√65)/2", "sec": 900, "lvl": 3}, {"id": "D14.3-1", "sub": "14.3", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=521850", "ans": "1/2", "sec": 600, "lvl": 2}, {"id": "D14.3-2", "sub": "14.3", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=520994", "ans": "2", "sec": 540, "lvl": 2}, {"id": "D14.4-1", "sub": "14.4", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=514082", "ans": "-2", "sec": 600, "lvl": 2}, {"id": "D14.4-2", "sub": "14.4", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=517739", "ans": "-2", "sec": 540, "lvl": 2}, {"id": "D14.5-1", "sub": "14.5", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=507595", "ans": "-2π; -4π/3", "sec": 600, "lvl": 2}, {"id": "D14.5-2", "sub": "14.5", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=510018", "ans": "-2π; -11π/6; -7π/6", "sec": 660, "lvl": 2}, {"id": "D14.6-1", "sub": "14.6", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=500000", "ans": "-3π/4; arctg(1/3)-π", "sec": 720, "lvl": 3}, {"id": "D14.6-2", "sub": "14.6", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=501044", "ans": "11π/6; 7π/3; 17π/6", "sec": 600, "lvl": 2}, {"id": "D14.7-1", "sub": "14.7", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=500111", "ans": "17π/6; 3π; 19π/6", "sec": 600, "lvl": 2}, {"id": "D14.7-2", "sub": "14.7", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=509501", "ans": "5π/4; 5π/2", "sec": 660, "lvl": 2}, {"id": "D14.8-1", "sub": "14.8", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=507644", "ans": "11π/3; 4π", "sec": 720, "lvl": 3}, {"id": "D14.8-2", "sub": "14.8", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=509820", "ans": "-7π/6", "sec": 600, "lvl": 2}, {"id": "D14.9-1", "sub": "14.9", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=507886", "ans": "-2π; -5π/3; -π", "sec": 660, "lvl": 2}, {"id": "D14.9-2", "sub": "14.9", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=500346", "ans": "11π/3; 4π; 13π/3", "sec": 600, "lvl": 2}, {"id": "D14.10-1", "sub": "14.10", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=484557", "ans": "3π/2; 5π/3; 5π/2; 7π/2", "sec": 720, "lvl": 3}, {"id": "D14.10-2", "sub": "14.10", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=512335", "ans": "-9π/4; -7π/4", "sec": 720, "lvl": 3}, {"id": "D14.11-1", "sub": "14.11", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=515648", "ans": "5π/3", "sec": 780, "lvl": 3}, {"id": "D14.11-2", "sub": "14.11", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=516331", "ans": "-23π/6", "sec": 720, "lvl": 3}, {"id": "D14.12-1", "sub": "14.12", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=501689", "ans": "21π/4; 25π/4", "sec": 600, "lvl": 2}, {"id": "D14.12-2", "sub": "14.12", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=511105", "ans": "5π/2; 11π/4; 7π/2", "sec": 720, "lvl": 3}, {"id": "D14.13-1", "sub": "14.13", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=528987", "ans": "-11π/2; -9π/2; -4π", "sec": 840, "lvl": 3}, {"id": "D14.13-2", "sub": "14.13", "num": 14, "link": "https://math-ege.sdamgia.ru/problem?id=561193", "ans": "5π/6", "sec": 840, "lvl": 3}, {"id": "D15.1-1", "sub": "15.1", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=510992", "ans": "20√3/7", "sec": 900, "lvl": 2}, {"id": "D15.1-2", "sub": "15.1", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=514520", "ans": "√15/5", "sec": 1200, "lvl": 3}, {"id": "D15.2-1", "sub": "15.2", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=484570", "ans": "√6/3", "sec": 900, "lvl": 2}, {"id": "D15.2-2", "sub": "15.2", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=484573", "ans": "3", "sec": 1080, "lvl": 2}, {"id": "D15.3-1", "sub": "15.3", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=510236", "ans": "√6/6", "sec": 900, "lvl": 2}, {"id": "D15.3-2", "sub": "15.3", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=510562", "ans": "√3/3", "sec": 1020, "lvl": 2}, {"id": "D15.4-1", "sub": "15.4", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=507319", "ans": "36", "sec": 900, "lvl": 2}, {"id": "D15.4-2", "sub": "15.4", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=507584", "ans": "192", "sec": 900, "lvl": 2}, {"id": "D15.5-1", "sub": "15.5", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=507887", "ans": "19", "sec": 900, "lvl": 2}, {"id": "D15.5-2", "sub": "15.5", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=509821", "ans": "16", "sec": 1200, "lvl": 3}, {"id": "D15.6-1", "sub": "15.6", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=501752", "ans": "√4209", "sec": 1200, "lvl": 3}, {"id": "D15.6-2", "sub": "15.6", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=509580", "ans": "97,5", "sec": 1200, "lvl": 3}, {"id": "D15.7-1", "sub": "15.7", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=510019", "ans": "arcsin√(3/8)", "sec": 1200, "lvl": 3}, {"id": "D15.7-2", "sub": "15.7", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=509502", "ans": "arctg(√17/3)", "sec": 1200, "lvl": 3}, {"id": "D15.8-1", "sub": "15.8", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=484562", "ans": "√(2/3)", "sec": 1020, "lvl": 2}, {"id": "D15.8-2", "sub": "15.8", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=510568", "ans": "arccos(1/3)", "sec": 1020, "lvl": 2}, {"id": "D15.9-1", "sub": "15.9", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=507576", "ans": "arcsin(24/85)", "sec": 1200, "lvl": 3}, {"id": "D15.9-2", "sub": "15.9", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=510597", "ans": "arctg(3/5)", "sec": 1020, "lvl": 2}, {"id": "D15.10-1", "sub": "15.10", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=507634", "ans": "arccos(1/6)", "sec": 1200, "lvl": 3}, {"id": "D15.10-2", "sub": "15.10", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=513276", "ans": "192", "sec": 1200, "lvl": 3}, {"id": "D15.11-1", "sub": "15.11", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=501436", "ans": "3", "sec": 1200, "lvl": 3}, {"id": "D15.11-2", "sub": "15.11", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=501549", "ans": "375√3/8", "sec": 1200, "lvl": 3}, {"id": "D15.12-1", "sub": "15.12", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=502115", "ans": "13", "sec": 900, "lvl": 2}, {"id": "D15.12-2", "sub": "15.12", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=505103", "ans": "9√14", "sec": 900, "lvl": 2}, {"id": "D15.13-1", "sub": "15.13", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=502075", "ans": "8√3/3", "sec": 900, "lvl": 2}, {"id": "D15.13-2", "sub": "15.13", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=502095", "ans": "6√10/5", "sec": 900, "lvl": 2}, {"id": "D15.14-1", "sub": "15.14", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=503321", "ans": "128(25-4√34)π/9", "sec": 1200, "lvl": 3}, {"id": "D15.14-2", "sub": "15.14", "num": 15, "link": "https://math-ege.sdamgia.ru/problem?id=505566", "ans": "8:3", "sec": 900, "lvl": 2}, {"id": "D16.1-1", "sub": "16.1", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=507582", "ans": "(0;1]∪{2}∪[3;4)∪(4;5]", "sec": 1200, "lvl": 3}, {"id": "D16.1-2", "sub": "16.1", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=507792", "ans": "(0;1/3]∪[1/2;5/6)", "sec": 1200, "lvl": 3}, {"id": "D16.2-1", "sub": "16.2", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=508440", "ans": "(-∞;0]∪(1;5/3]∪(2;3)", "sec": 900, "lvl": 2}, {"id": "D16.2-2", "sub": "16.2", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=508518", "ans": "(-∞;-5]∪[6;7)∪(7;9)", "sec": 1080, "lvl": 3}, {"id": "D16.3-1", "sub": "16.3", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=508296", "ans": "(-∞;0)∪(0;+∞)", "sec": 600, "lvl": 1}, {"id": "D16.3-2", "sub": "16.3", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=508297", "ans": "[-1;2]", "sec": 540, "lvl": 1}, {"id": "D16.4-1", "sub": "16.4", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=508319", "ans": "{0}", "sec": 900, "lvl": 2}, {"id": "D16.4-2", "sub": "16.4", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=508428", "ans": "(0;log_5 2]∪(log_5 3;1]", "sec": 1020, "lvl": 2}, {"id": "D16.5-1", "sub": "16.5", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=508459", "ans": "(0;4)∪(8;+∞)", "sec": 600, "lvl": 1}, {"id": "D16.5-2", "sub": "16.5", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=507741", "ans": "{-2}", "sec": 1200, "lvl": 3}, {"id": "D16.6-1", "sub": "16.6", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=507736", "ans": "(0;0,5]∪(√2;⁴√32]", "sec": 1020, "lvl": 2}, {"id": "D16.6-2", "sub": "16.6", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=507764", "ans": "[-3;0)∪(0;1/4)∪(1;5/4)", "sec": 1200, "lvl": 3}, {"id": "D16.7-1", "sub": "16.7", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=505567", "ans": "(1/4;1)∪(1;2]∪{4}", "sec": 1200, "lvl": 3}, {"id": "D16.7-2", "sub": "16.7", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=507635", "ans": "(0;1]∪(2;8)∪(8;32]", "sec": 1200, "lvl": 3}, {"id": "D16.8-1", "sub": "16.8", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=507258", "ans": "(-4;-3)∪(-1;3)", "sec": 1200, "lvl": 3}, {"id": "D16.8-2", "sub": "16.8", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=508451", "ans": "[-1;1]", "sec": 1020, "lvl": 2}, {"id": "D16.9-1", "sub": "16.9", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=508452", "ans": "(0;1]∪[5;+∞)", "sec": 900, "lvl": 2}, {"id": "D16.9-2", "sub": "16.9", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=508482", "ans": "((-3-√29)/2;-4]∪[0;1]", "sec": 1020, "lvl": 2}, {"id": "D16.10-1", "sub": "16.10", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=507795", "ans": "{0}∪[4;+∞)", "sec": 1080, "lvl": 3}, {"id": "D16.10-2", "sub": "16.10", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=508540", "ans": "(-∞;-log_3 2]∪[log_3 10;+∞)", "sec": 1080, "lvl": 3}, {"id": "D16.11-1", "sub": "16.11", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=507676", "ans": "(1;+∞)", "sec": 1080, "lvl": 3}, {"id": "D16.11-2", "sub": "16.11", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=507503", "ans": "(-log_4 10;-log_4 5]", "sec": 1200, "lvl": 3}, {"id": "D16.12-1", "sub": "16.12", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=507779", "ans": "[√2/4;1)∪(1;√8)", "sec": 1200, "lvl": 3}, {"id": "D16.12-2", "sub": "16.12", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=484595", "ans": "(1;3/2)∪(2;5/2)∪(3;+∞)", "sec": 1080, "lvl": 3}, {"id": "D16.13-1", "sub": "16.13", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=527709", "ans": "{π; 2π}", "sec": 1200, "lvl": 3}, {"id": "D16.13-2", "sub": "16.13", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=558012", "ans": "(1/2;3]", "sec": 1200, "lvl": 3}, {"id": "D16.14-1", "sub": "16.14", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=507667", "ans": "(-∞;-6)∪(-6;5-5√2]∪{5}∪[5+5√2;+∞)", "sec": 1080, "lvl": 3}, {"id": "D16.14-2", "sub": "16.14", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=507670", "ans": "(-∞;-3-3√2]∪{-3}∪[-3+3√2;4)∪(4;+∞)", "sec": 1080, "lvl": 3}, {"id": "D16.15-1", "sub": "16.15", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=511831", "ans": "(-1;-5/6]∪{log_7 6}∪[5;+∞)", "sec": 1200, "lvl": 3}, {"id": "D16.15-2", "sub": "16.15", "num": 16, "link": "https://math-ege.sdamgia.ru/problem?id=484588", "ans": "{3}", "sec": 1080, "lvl": 3}, {"id": "D17.1-1", "sub": "17.1", "num": 17, "link": "https://math-ege.sdamgia.ru/problem?id=511234", "ans": "6 24/25 мин; 0,6 км", "sec": 900, "lvl": 2}, {"id": "D17.1-2", "sub": "17.1", "num": 17, "link": "https://math-ege.sdamgia.ru/problem?id=511887", "ans": "v=6; 25/6 ч", "sec": 900, "lvl": 2}, {"id": "D18.1-1", "sub": "18.1", "num": 18, "link": "https://math-ege.sdamgia.ru/problem?id=505501", "ans": "3:1", "sec": 1200, "lvl": 2}, {"id": "D18.1-2", "sub": "18.1", "num": 18, "link": "https://math-ege.sdamgia.ru/problem?id=504546", "ans": "13/2", "sec": 1200, "lvl": 3}, {"id": "D18.2-1", "sub": "18.2", "num": 18, "link": "https://math-ege.sdamgia.ru/problem?id=507262", "ans": "113", "sec": 1200, "lvl": 3}, {"id": "D18.2-2", "sub": "18.2", "num": 18, "link": "https://math-ege.sdamgia.ru/problem?id=504418", "ans": "14", "sec": 1200, "lvl": 3}, {"id": "D18.3-1", "sub": "18.3", "num": 18, "link": "https://math-ege.sdamgia.ru/problem?id=501887", "ans": "3,2", "sec": 1200, "lvl": 3}, {"id": "D18.3-2", "sub": "18.3", "num": 18, "link": "https://math-ege.sdamgia.ru/problem?id=507889", "ans": "117√3", "sec": 1200, "lvl": 3}, {"id": "D18.4-1", "sub": "18.4", "num": 18, "link": "https://math-ege.sdamgia.ru/problem?id=509425", "ans": "14,4", "sec": 1200, "lvl": 3}, {"id": "D18.4-2", "sub": "18.4", "num": 18, "link": "https://math-ege.sdamgia.ru/problem?id=502296", "ans": "40", "sec": 1080, "lvl": 2}, {"id": "D18.5-1", "sub": "18.5", "num": 18, "link": "https://math-ege.sdamgia.ru/problem?id=508320", "ans": "16/√3", "sec": 1080, "lvl": 2}, {"id": "D18.5-2", "sub": "18.5", "num": 18, "link": "https://math-ege.sdamgia.ru/problem?id=508393", "ans": "4√2", "sec": 1080, "lvl": 2}, {"id": "D18.6-1", "sub": "18.6", "num": 18, "link": "https://math-ege.sdamgia.ru/problem?id=505709", "ans": "120/13", "sec": 1080, "lvl": 2}, {"id": "D18.6-2", "sub": "18.6", "num": 18, "link": "https://math-ege.sdamgia.ru/problem?id=509823", "ans": "18", "sec": 1200, "lvl": 3}, {"id": "D18.7-1", "sub": "18.7", "num": 18, "link": "https://math-ege.sdamgia.ru/problem?id=503002", "ans": "60°", "sec": 1080, "lvl": 2}, {"id": "D18.7-2", "sub": "18.7", "num": 18, "link": "https://math-ege.sdamgia.ru/problem?id=514372", "ans": "1:3", "sec": 1200, "lvl": 3}, {"id": "D18.8-1", "sub": "18.8", "num": 18, "link": "https://math-ege.sdamgia.ru/problem?id=519661", "ans": "55/7", "sec": 1080, "lvl": 2}, {"id": "D18.8-2", "sub": "18.8", "num": 18, "link": "https://math-ege.sdamgia.ru/problem?id=519685", "ans": "51/2+18√2", "sec": 1200, "lvl": 3}, {"id": "D18.9-1", "sub": "18.9", "num": 18, "link": "https://math-ege.sdamgia.ru/problem?id=513430", "ans": "3√3/4", "sec": 1200, "lvl": 3}, {"id": "D18.9-2", "sub": "18.9", "num": 18, "link": "https://math-ege.sdamgia.ru/problem?id=513261", "ans": "85/3", "sec": 1200, "lvl": 3}, {"id": "D18.10-1", "sub": "18.10", "num": 18, "link": "https://math-ege.sdamgia.ru/problem?id=515746", "ans": "ac/b", "sec": 1200, "lvl": 3}, {"id": "D18.10-2", "sub": "18.10", "num": 18, "link": "https://math-ege.sdamgia.ru/problem?id=563300", "ans": "2:3", "sec": 1200, "lvl": 3}, {"id": "D19.1-1", "sub": "19.1", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=519686", "ans": "17", "sec": 900, "lvl": 3}, {"id": "D19.1-2", "sub": "19.1", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=515710", "ans": "[0;(4√2-2)/21)∪((4√2-2)/21;1/3]", "sec": 1500, "lvl": 3}, {"id": "D19.2-1", "sub": "19.2", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=507512", "ans": "[1,5;3]∪[6;+∞)", "sec": 1500, "lvl": 3}, {"id": "D19.2-2", "sub": "19.2", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=500115", "ans": "(-1;5)", "sec": 1200, "lvl": 2}, {"id": "D19.3-1", "sub": "19.3", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=509648", "ans": "[0;6]∪[8;14]", "sec": 1200, "lvl": 3}, {"id": "D19.3-2", "sub": "19.3", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=500216", "ans": "[3/2;5/3)", "sec": 1500, "lvl": 3}, {"id": "D19.4-1", "sub": "19.4", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=507589", "ans": "-5/2; -19/2", "sec": 1500, "lvl": 3}, {"id": "D19.4-2", "sub": "19.4", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=507594", "ans": "2; 22", "sec": 1500, "lvl": 3}, {"id": "D19.5-1", "sub": "19.5", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=509506", "ans": "(-6;1]∪{8}∪[9;10)", "sec": 1500, "lvl": 3}, {"id": "D19.5-2", "sub": "19.5", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=484645", "ans": "(-1;0]∪[1;1,5)", "sec": 1500, "lvl": 3}, {"id": "D19.6-1", "sub": "19.6", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=512886", "ans": "{-42}∪(-2;3)", "sec": 1500, "lvl": 3}, {"id": "D19.6-2", "sub": "19.6", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=512463", "ans": "(-4;+∞)", "sec": 1200, "lvl": 3}, {"id": "D19.7-1", "sub": "19.7", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=500411", "ans": "(-∞;1]∪[5;+∞)", "sec": 1500, "lvl": 3}, {"id": "D19.7-2", "sub": "19.7", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=510665", "ans": "-1; 3", "sec": 1500, "lvl": 3}, {"id": "D19.8-1", "sub": "19.8", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=512818", "ans": "[4-√10;4+√10]", "sec": 1500, "lvl": 3}, {"id": "D19.8-2", "sub": "19.8", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=512819", "ans": "[6-√21;6+√21]", "sec": 1500, "lvl": 3}, {"id": "D19.9-1", "sub": "19.9", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=514126", "ans": "(-∞;-1)∪{0;2}∪(5;+∞)", "sec": 1500, "lvl": 3}, {"id": "D19.9-2", "sub": "19.9", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=505502", "ans": "(-∞;-2)∪(2;3)∪(3;7/2)∪(11/2;+∞)", "sec": 1500, "lvl": 3}, {"id": "D19.10-1", "sub": "19.10", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=509590", "ans": "-3/4; 4/3", "sec": 1500, "lvl": 3}, {"id": "D19.10-2", "sub": "19.10", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=517428", "ans": "(-4;-3)", "sec": 1500, "lvl": 3}, {"id": "D19.11-1", "sub": "19.11", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=501219", "ans": "1", "sec": 1200, "lvl": 2}, {"id": "D19.11-2", "sub": "19.11", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=500965", "ans": "(1,5;+∞)", "sec": 1500, "lvl": 3}, {"id": "D19.12-1", "sub": "19.12", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=507636", "ans": "-2; 3", "sec": 1500, "lvl": 3}, {"id": "D19.12-2", "sub": "19.12", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=500004", "ans": "1/2; -1/4", "sec": 1500, "lvl": 3}, {"id": "D19.13-1", "sub": "19.13", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=512340", "ans": "-2; -1; 0; 1", "sec": 1500, "lvl": 3}, {"id": "D19.13-2", "sub": "19.13", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=514030", "ans": "[1;6]", "sec": 1500, "lvl": 3}, {"id": "D19.14-1", "sub": "19.14", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=500016", "ans": "(-∞;-2]∪{0}", "sec": 1500, "lvl": 3}, {"id": "D19.14-2", "sub": "19.14", "num": 19, "link": "https://math-ege.sdamgia.ru/problem?id=484644", "ans": "(-√5;-√3)∪(√3;√5)", "sec": 1200, "lvl": 3}, {"id": "D20.1-1", "sub": "20.1", "num": 20, "link": "https://math-ege.sdamgia.ru/problem?id=502027", "ans": "а) да; б) нет; в) 91", "sec": 1500, "lvl": 3}, {"id": "D20.1-2", "sub": "20.1", "num": 20, "link": "https://math-ege.sdamgia.ru/problem?id=508112", "ans": "а) 10; б) 90; в) все натуральные", "sec": 1500, "lvl": 3}, {"id": "D20.2-1", "sub": "20.2", "num": 20, "link": "https://math-ege.sdamgia.ru/problem?id=509826", "ans": "а) да; б) да; в) 4", "sec": 1500, "lvl": 3}, {"id": "D20.2-2", "sub": "20.2", "num": 20, "link": "https://math-ege.sdamgia.ru/problem?id=513279", "ans": "а) да; б) нет; в) 38 1/7", "sec": 1500, "lvl": 3}, {"id": "D20.3-1", "sub": "20.3", "num": 20, "link": "https://math-ege.sdamgia.ru/problem?id=501512", "ans": "а) да; б) 41; в) 3; 6", "sec": 1500, "lvl": 3}, {"id": "D20.3-2", "sub": "20.3", "num": 20, "link": "https://math-ege.sdamgia.ru/problem?id=502079", "ans": "а) 11285; б) нет; в) 905; 917", "sec": 1800, "lvl": 3}, {"id": "D20.4-1", "sub": "20.4", "num": 20, "link": "https://math-ege.sdamgia.ru/problem?id=505541", "ans": "а) да; б) 10; в) 9/19", "sec": 1500, "lvl": 3}, {"id": "D20.4-2", "sub": "20.4", "num": 20, "link": "https://math-ege.sdamgia.ru/problem?id=505597", "ans": "во всех случаях — второй", "sec": 1500, "lvl": 3}]};
+const SUBS = [
+{
+"id": "1.1",
+"num": 1,
+"numName": "Планиметрия (краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Решение прямоугольного треугольника",
+"protos": 50,
+"total": 123,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [],
+"service": false
+},
+{
+"id": "1.2",
+"num": 1,
+"numName": "Планиметрия (краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Решение равнобедренного треугольника",
+"protos": 51,
+"total": 95,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [
+"1.1"
+],
+"service": false
+},
+{
+"id": "1.3",
+"num": 1,
+"numName": "Планиметрия (краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Треугольники общего вида",
+"protos": 26,
+"total": 70,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [
+"1.1"
+],
+"service": false
+},
+{
+"id": "1.4",
+"num": 1,
+"numName": "Планиметрия (краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Параллелограммы",
+"protos": 35,
+"total": 92,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [
+"1.1"
+],
+"service": false
+},
+{
+"id": "1.5",
+"num": 1,
+"numName": "Планиметрия (краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Трапеция",
+"protos": 27,
+"total": 66,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [
+"1.1"
+],
+"service": false
+},
+{
+"id": "1.6",
+"num": 1,
+"numName": "Планиметрия (краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Центральные и вписанные углы",
+"protos": 16,
+"total": 46,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [],
+"service": false
+},
+{
+"id": "1.7",
+"num": 1,
+"numName": "Планиметрия (краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Касательная, хорда, секущая",
+"protos": 11,
+"total": 33,
+"lvl": 1,
+"lessons": 0.3,
+"prereq": [
+"1.6"
+],
+"service": false
+},
+{
+"id": "1.8",
+"num": 1,
+"numName": "Планиметрия (краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Вписанные окружности",
+"protos": 24,
+"total": 85,
+"lvl": 2,
+"lessons": 0.5,
+"prereq": [
+"1.1",
+"1.6"
+],
+"service": false
+},
+{
+"id": "1.9",
+"num": 1,
+"numName": "Планиметрия (краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Описанные окружности",
+"protos": 30,
+"total": 98,
+"lvl": 2,
+"lessons": 0.5,
+"prereq": [
+"1.1",
+"1.6"
+],
+"service": false
+},
+{
+"id": "2.1",
+"num": 2,
+"numName": "Векторы",
+"part": 1,
+"pts": 1,
+"name": "Векторы и операции с ними",
+"protos": 58,
+"total": 205,
+"lvl": 1,
+"lessons": 1.5,
+"prereq": [],
+"service": false
+},
+{
+"id": "3.1",
+"num": 3,
+"numName": "Стереометрия (краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Куб",
+"protos": 15,
+"total": 41,
+"lvl": 1,
+"lessons": 0.4,
+"prereq": [],
+"service": false
+},
+{
+"id": "3.2",
+"num": 3,
+"numName": "Стереометрия (краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Прямоугольный параллелепипед",
+"protos": 33,
+"total": 106,
+"lvl": 1,
+"lessons": 0.6,
+"prereq": [
+"3.1"
+],
+"service": false
+},
+{
+"id": "3.3",
+"num": 3,
+"numName": "Стереометрия (краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Элементы составных многогранников",
+"protos": 15,
+"total": 49,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [
+"3.2"
+],
+"service": false
+},
+{
+"id": "3.4",
+"num": 3,
+"numName": "Стереометрия (краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Площадь поверхности составного многогранника",
+"protos": 18,
+"total": 53,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [
+"3.2"
+],
+"service": false
+},
+{
+"id": "3.5",
+"num": 3,
+"numName": "Стереометрия (краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Объем составного многогранника",
+"protos": 17,
+"total": 43,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [
+"3.2"
+],
+"service": false
+},
+{
+"id": "3.6",
+"num": 3,
+"numName": "Стереометрия (краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Призма",
+"protos": 52,
+"total": 150,
+"lvl": 2,
+"lessons": 1.0,
+"prereq": [
+"1.1",
+"3.2"
+],
+"service": false
+},
+{
+"id": "3.7",
+"num": 3,
+"numName": "Стереометрия (краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Пирамида",
+"protos": 69,
+"total": 173,
+"lvl": 2,
+"lessons": 1.0,
+"prereq": [
+"1.1",
+"3.2"
+],
+"service": false
+},
+{
+"id": "3.8",
+"num": 3,
+"numName": "Стереометрия (краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Комбинации тел",
+"protos": 42,
+"total": 138,
+"lvl": 2,
+"lessons": 1.0,
+"prereq": [
+"3.6",
+"3.7",
+"3.9",
+"3.10",
+"3.11"
+],
+"service": false
+},
+{
+"id": "3.9",
+"num": 3,
+"numName": "Стереометрия (краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Цилиндр",
+"protos": 17,
+"total": 55,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [],
+"service": false
+},
+{
+"id": "3.10",
+"num": 3,
+"numName": "Стереометрия (краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Конус",
+"protos": 28,
+"total": 87,
+"lvl": 2,
+"lessons": 0.7,
+"prereq": [
+"1.1"
+],
+"service": false
+},
+{
+"id": "3.11",
+"num": 3,
+"numName": "Стереометрия (краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Шар",
+"protos": 9,
+"total": 28,
+"lvl": 1,
+"lessons": 0.4,
+"prereq": [],
+"service": false
+},
+{
+"id": "4.1",
+"num": 4,
+"numName": "Начала теории вероятностей",
+"part": 1,
+"pts": 1,
+"name": "Классическое определение вероятности",
+"protos": 61,
+"total": 520,
+"lvl": 1,
+"lessons": 1.5,
+"prereq": [],
+"service": false
+},
+{
+"id": "5.1",
+"num": 5,
+"numName": "Вероятности сложных событий",
+"part": 1,
+"pts": 1,
+"name": "Теоремы о вероятностях событий",
+"protos": 60,
+"total": 260,
+"lvl": 2,
+"lessons": 2.0,
+"prereq": [
+"4.1"
+],
+"service": false
+},
+{
+"id": "5.2",
+"num": 5,
+"numName": "Вероятности сложных событий",
+"part": 1,
+"pts": 1,
+"name": "Новые задания банка (MathЕГЭ)",
+"protos": 15,
+"total": 48,
+"lvl": 2,
+"lessons": 0.5,
+"prereq": [
+"5.1"
+],
+"service": false
+},
+{
+"id": "6.1",
+"num": 6,
+"numName": "Случайная величина и матожидание (НОВОЕ в 2027)",
+"part": 1,
+"pts": 1,
+"name": "Распределение дискретной случайной величины, математическое ожидание",
+"protos": 0,
+"total": 0,
+"lvl": 2,
+"lessons": 1.0,
+"prereq": [
+"4.1",
+"5.1"
+],
+"service": false
+},
+{
+"id": "6.2",
+"num": 6,
+"numName": "Случайная величина и матожидание (НОВОЕ в 2027)",
+"part": 1,
+"pts": 1,
+"name": "Дисперсия и стандартное отклонение",
+"protos": 0,
+"total": 0,
+"lvl": 2,
+"lessons": 0.7,
+"prereq": [
+"6.1"
+],
+"service": false
+},
+{
+"id": "6.3",
+"num": 6,
+"numName": "Случайная величина и матожидание (НОВОЕ в 2027)",
+"part": 1,
+"pts": 1,
+"name": "Равномерное, показательное, нормальное распределения (функции распределения и плотности)",
+"protos": 0,
+"total": 0,
+"lvl": 3,
+"lessons": 0.5,
+"prereq": [
+"6.1"
+],
+"service": false
+},
+{
+"id": "7.1",
+"num": 7,
+"numName": "Простейшие уравнения",
+"part": 1,
+"pts": 1,
+"name": "Линейные, квадратные, кубические уравнения",
+"protos": 9,
+"total": 47,
+"lvl": 1,
+"lessons": 0.3,
+"prereq": [],
+"service": false
+},
+{
+"id": "7.2",
+"num": 7,
+"numName": "Простейшие уравнения",
+"part": 1,
+"pts": 1,
+"name": "Рациональные уравнения",
+"protos": 10,
+"total": 56,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [
+"7.1"
+],
+"service": false
+},
+{
+"id": "7.3",
+"num": 7,
+"numName": "Простейшие уравнения",
+"part": 1,
+"pts": 1,
+"name": "Иррациональные уравнения",
+"protos": 16,
+"total": 99,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [
+"7.1"
+],
+"service": false
+},
+{
+"id": "7.4",
+"num": 7,
+"numName": "Простейшие уравнения",
+"part": 1,
+"pts": 1,
+"name": "Показательные уравнения",
+"protos": 19,
+"total": 92,
+"lvl": 1,
+"lessons": 0.7,
+"prereq": [
+"8.4"
+],
+"service": false
+},
+{
+"id": "7.5",
+"num": 7,
+"numName": "Простейшие уравнения",
+"part": 1,
+"pts": 1,
+"name": "Логарифмические уравнения",
+"protos": 14,
+"total": 104,
+"lvl": 1,
+"lessons": 0.7,
+"prereq": [
+"8.7"
+],
+"service": false
+},
+{
+"id": "7.6",
+"num": 7,
+"numName": "Простейшие уравнения",
+"part": 1,
+"pts": 1,
+"name": "Тригонометрические уравнения",
+"protos": 3,
+"total": 21,
+"lvl": 2,
+"lessons": 0.5,
+"prereq": [
+"8.9"
+],
+"service": false
+},
+{
+"id": "8.1",
+"num": 8,
+"numName": "Вычисления и преобразования",
+"part": 1,
+"pts": 1,
+"name": "Преобразования числовых рациональных выражений",
+"protos": 6,
+"total": 23,
+"lvl": 1,
+"lessons": 0.3,
+"prereq": [],
+"service": false
+},
+{
+"id": "8.2",
+"num": 8,
+"numName": "Вычисления и преобразования",
+"part": 1,
+"pts": 1,
+"name": "Преобразования алгебраических выражений и дробей",
+"protos": 26,
+"total": 67,
+"lvl": 1,
+"lessons": 1.0,
+"prereq": [
+"8.1"
+],
+"service": false
+},
+{
+"id": "8.3",
+"num": 8,
+"numName": "Вычисления и преобразования",
+"part": 1,
+"pts": 1,
+"name": "Вычисление значений степенных выражений",
+"protos": 20,
+"total": 87,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [
+"8.4"
+],
+"service": false
+},
+{
+"id": "8.4",
+"num": 8,
+"numName": "Вычисления и преобразования",
+"part": 1,
+"pts": 1,
+"name": "Действия со степенями",
+"protos": 31,
+"total": 97,
+"lvl": 1,
+"lessons": 0.7,
+"prereq": [],
+"service": false
+},
+{
+"id": "8.5",
+"num": 8,
+"numName": "Вычисления и преобразования",
+"part": 1,
+"pts": 1,
+"name": "Преобразования числовых иррациональных выражений",
+"protos": 13,
+"total": 59,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [
+"8.4"
+],
+"service": false
+},
+{
+"id": "8.6",
+"num": 8,
+"numName": "Вычисления и преобразования",
+"part": 1,
+"pts": 1,
+"name": "Преобразования буквенных иррациональных выражений",
+"protos": 11,
+"total": 35,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [
+"8.5"
+],
+"service": false
+},
+{
+"id": "8.7",
+"num": 8,
+"numName": "Вычисления и преобразования",
+"part": 1,
+"pts": 1,
+"name": "Преобразования числовых логарифмических выражений",
+"protos": 34,
+"total": 102,
+"lvl": 2,
+"lessons": 1.0,
+"prereq": [
+"8.4"
+],
+"service": false
+},
+{
+"id": "8.8",
+"num": 8,
+"numName": "Вычисления и преобразования",
+"part": 1,
+"pts": 1,
+"name": "Преобразования буквенных логарифмических выражений",
+"protos": 3,
+"total": 15,
+"lvl": 2,
+"lessons": 0.3,
+"prereq": [
+"8.7"
+],
+"service": false
+},
+{
+"id": "8.9",
+"num": 8,
+"numName": "Вычисления и преобразования",
+"part": 1,
+"pts": 1,
+"name": "Вычисление значений тригонометрических выражений",
+"protos": 31,
+"total": 94,
+"lvl": 2,
+"lessons": 1.0,
+"prereq": [
+"1.1"
+],
+"service": false
+},
+{
+"id": "8.10",
+"num": 8,
+"numName": "Вычисления и преобразования",
+"part": 1,
+"pts": 1,
+"name": "Преобразования числовых тригонометрических выражений",
+"protos": 32,
+"total": 122,
+"lvl": 2,
+"lessons": 1.0,
+"prereq": [
+"8.9"
+],
+"service": false
+},
+{
+"id": "8.11",
+"num": 8,
+"numName": "Вычисления и преобразования",
+"part": 1,
+"pts": 1,
+"name": "Преобразования буквенных тригонометрических выражений",
+"protos": 2,
+"total": 7,
+"lvl": 2,
+"lessons": 0.3,
+"prereq": [
+"8.10"
+],
+"service": false
+},
+{
+"id": "9.1",
+"num": 9,
+"numName": "Производная и первообразная",
+"part": 1,
+"pts": 1,
+"name": "Физический смысл производной",
+"protos": 6,
+"total": 22,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [
+"9.0"
+],
+"service": false
+},
+{
+"id": "9.2",
+"num": 9,
+"numName": "Производная и первообразная",
+"part": 1,
+"pts": 1,
+"name": "Геометрический смысл производной, касательная",
+"protos": 31,
+"total": 135,
+"lvl": 2,
+"lessons": 1.5,
+"prereq": [
+"9.0",
+"12.1"
+],
+"service": false
+},
+{
+"id": "9.3",
+"num": 9,
+"numName": "Производная и первообразная",
+"part": 1,
+"pts": 1,
+"name": "Применение производной к исследованию функций (по графику f или f')",
+"protos": 41,
+"total": 194,
+"lvl": 2,
+"lessons": 2.0,
+"prereq": [
+"9.0"
+],
+"service": false
+},
+{
+"id": "9.4",
+"num": 9,
+"numName": "Производная и первообразная",
+"part": 1,
+"pts": 1,
+"name": "Первообразная",
+"protos": 5,
+"total": 28,
+"lvl": 2,
+"lessons": 0.7,
+"prereq": [
+"9.0"
+],
+"service": false
+},
+{
+"id": "9.0",
+"num": 9,
+"numName": "Производная и первообразная",
+"part": 1,
+"pts": 1,
+"name": "[служебный] Таблица производных, правила дифференцирования",
+"protos": 0,
+"total": 0,
+"lvl": 2,
+"lessons": 1.0,
+"prereq": [
+"8.2",
+"8.4"
+],
+"service": true
+},
+{
+"id": "10.1",
+"num": 10,
+"numName": "Задачи с прикладным содержанием",
+"part": 1,
+"pts": 1,
+"name": "Линейные уравнения и неравенства",
+"protos": 2,
+"total": 16,
+"lvl": 1,
+"lessons": 0.3,
+"prereq": [
+"7.1"
+],
+"service": false
+},
+{
+"id": "10.2",
+"num": 10,
+"numName": "Задачи с прикладным содержанием",
+"part": 1,
+"pts": 1,
+"name": "Квадратные и степенные уравнения и неравенства",
+"protos": 18,
+"total": 110,
+"lvl": 1,
+"lessons": 0.7,
+"prereq": [
+"7.1"
+],
+"service": false
+},
+{
+"id": "10.3",
+"num": 10,
+"numName": "Задачи с прикладным содержанием",
+"part": 1,
+"pts": 1,
+"name": "Рациональные уравнения и неравенства",
+"protos": 14,
+"total": 81,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [
+"7.2"
+],
+"service": false
+},
+{
+"id": "10.4",
+"num": 10,
+"numName": "Задачи с прикладным содержанием",
+"part": 1,
+"pts": 1,
+"name": "Иррациональные уравнения и неравенства",
+"protos": 10,
+"total": 52,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [
+"7.3"
+],
+"service": false
+},
+{
+"id": "10.5",
+"num": 10,
+"numName": "Задачи с прикладным содержанием",
+"part": 1,
+"pts": 1,
+"name": "Показательные уравнения и неравенства",
+"protos": 7,
+"total": 45,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [
+"7.4"
+],
+"service": false
+},
+{
+"id": "10.6",
+"num": 10,
+"numName": "Задачи с прикладным содержанием",
+"part": 1,
+"pts": 1,
+"name": "Логарифмические уравнения и неравенства",
+"protos": 4,
+"total": 28,
+"lvl": 1,
+"lessons": 0.4,
+"prereq": [
+"7.5"
+],
+"service": false
+},
+{
+"id": "10.7",
+"num": 10,
+"numName": "Задачи с прикладным содержанием",
+"part": 1,
+"pts": 1,
+"name": "Тригонометрические уравнения и неравенства",
+"protos": 16,
+"total": 130,
+"lvl": 2,
+"lessons": 1.0,
+"prereq": [
+"7.6"
+],
+"service": false
+},
+{
+"id": "10.8",
+"num": 10,
+"numName": "Задачи с прикладным содержанием",
+"part": 1,
+"pts": 1,
+"name": "Разные задачи",
+"protos": 6,
+"total": 29,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [],
+"service": false
+},
+{
+"id": "11.1",
+"num": 11,
+"numName": "Текстовые задачи",
+"part": 1,
+"pts": 1,
+"name": "Задачи на проценты, сплавы и смеси",
+"protos": 18,
+"total": 113,
+"lvl": 2,
+"lessons": 1.5,
+"prereq": [
+"7.1"
+],
+"service": false
+},
+{
+"id": "11.2",
+"num": 11,
+"numName": "Текстовые задачи",
+"part": 1,
+"pts": 1,
+"name": "Задачи на движение по прямой",
+"protos": 30,
+"total": 122,
+"lvl": 2,
+"lessons": 1.5,
+"prereq": [
+"7.2"
+],
+"service": false
+},
+{
+"id": "11.3",
+"num": 11,
+"numName": "Текстовые задачи",
+"part": 1,
+"pts": 1,
+"name": "Задачи на движение по окружности",
+"protos": 5,
+"total": 36,
+"lvl": 2,
+"lessons": 0.5,
+"prereq": [
+"11.2"
+],
+"service": false
+},
+{
+"id": "11.4",
+"num": 11,
+"numName": "Текстовые задачи",
+"part": 1,
+"pts": 1,
+"name": "Задачи на движение по воде",
+"protos": 15,
+"total": 75,
+"lvl": 2,
+"lessons": 1.0,
+"prereq": [
+"11.2"
+],
+"service": false
+},
+{
+"id": "11.5",
+"num": 11,
+"numName": "Текстовые задачи",
+"part": 1,
+"pts": 1,
+"name": "Задачи на совместную работу",
+"protos": 25,
+"total": 129,
+"lvl": 2,
+"lessons": 1.5,
+"prereq": [
+"7.2"
+],
+"service": false
+},
+{
+"id": "11.6",
+"num": 11,
+"numName": "Текстовые задачи",
+"part": 1,
+"pts": 1,
+"name": "Задачи на прогрессии",
+"protos": 9,
+"total": 39,
+"lvl": 2,
+"lessons": 0.7,
+"prereq": [],
+"service": false
+},
+{
+"id": "12.1",
+"num": 12,
+"numName": "Графики функций",
+"part": 1,
+"pts": 1,
+"name": "Линейные функции",
+"protos": 5,
+"total": 76,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [],
+"service": false
+},
+{
+"id": "12.2",
+"num": 12,
+"numName": "Графики функций",
+"part": 1,
+"pts": 1,
+"name": "Параболы",
+"protos": 8,
+"total": 72,
+"lvl": 1,
+"lessons": 0.7,
+"prereq": [
+"12.1"
+],
+"service": false
+},
+{
+"id": "12.3",
+"num": 12,
+"numName": "Графики функций",
+"part": 1,
+"pts": 1,
+"name": "Гиперболы",
+"protos": 7,
+"total": 65,
+"lvl": 1,
+"lessons": 0.5,
+"prereq": [
+"12.1"
+],
+"service": false
+},
+{
+"id": "12.4",
+"num": 12,
+"numName": "Графики функций",
+"part": 1,
+"pts": 1,
+"name": "Корни",
+"protos": 2,
+"total": 10,
+"lvl": 1,
+"lessons": 0.3,
+"prereq": [
+"12.1"
+],
+"service": false
+},
+{
+"id": "12.5",
+"num": 12,
+"numName": "Графики функций",
+"part": 1,
+"pts": 1,
+"name": "Показательные и логарифмические функции",
+"protos": 11,
+"total": 104,
+"lvl": 2,
+"lessons": 1.0,
+"prereq": [
+"8.4",
+"8.7"
+],
+"service": false
+},
+{
+"id": "12.6",
+"num": 12,
+"numName": "Графики функций",
+"part": 1,
+"pts": 1,
+"name": "Тригонометрические функции",
+"protos": 8,
+"total": 45,
+"lvl": 2,
+"lessons": 0.7,
+"prereq": [
+"8.9"
+],
+"service": false
+},
+{
+"id": "12.7",
+"num": 12,
+"numName": "Графики функций",
+"part": 1,
+"pts": 1,
+"name": "Комбинированные задачи",
+"protos": 9,
+"total": 75,
+"lvl": 2,
+"lessons": 0.7,
+"prereq": [
+"12.1",
+"12.2",
+"12.3",
+"12.4",
+"12.5",
+"12.6"
+],
+"service": false
+},
+{
+"id": "13.1",
+"num": 13,
+"numName": "Текстовая задача, в т.ч. финансовая (НОВОЕ в 2027: был №16 части 2, теперь краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Вклады",
+"protos": 5,
+"total": 5,
+"lvl": 2,
+"lessons": 1.0,
+"prereq": [
+"11.1",
+"11.6"
+],
+"service": false
+},
+{
+"id": "13.2",
+"num": 13,
+"numName": "Текстовая задача, в т.ч. финансовая (НОВОЕ в 2027: был №16 части 2, теперь краткий ответ)",
+"part": 1,
+"pts": 1,
+"name": "Кредиты (дифференцированные и аннуитетные платежи)",
+"protos": 25,
+"total": 28,
+"lvl": 3,
+"lessons": 3.0,
+"prereq": [
+"13.1"
+],
+"service": false
+},
+{
+"id": "14.0",
+"num": 14,
+"numName": "Уравнение с отбором корней",
+"part": 2,
+"pts": 2,
+"name": "[служебный] Отбор корней: единичная окружность, двойное неравенство, подбор k",
+"protos": 0,
+"total": 0,
+"lvl": 2,
+"lessons": 1.5,
+"prereq": [
+"7.6",
+"8.9"
+],
+"service": true
+},
+{
+"id": "14.1",
+"num": 14,
+"numName": "Уравнение с отбором корней",
+"part": 2,
+"pts": 2,
+"name": "Показательные уравнения",
+"protos": 12,
+"total": 23,
+"lvl": 2,
+"lessons": 1.0,
+"prereq": [
+"7.4",
+"14.0"
+],
+"service": false
+},
+{
+"id": "14.2",
+"num": 14,
+"numName": "Уравнение с отбором корней",
+"part": 2,
+"pts": 2,
+"name": "Рациональные уравнения",
+"protos": 5,
+"total": 7,
+"lvl": 2,
+"lessons": 0.5,
+"prereq": [
+"7.2",
+"14.0"
+],
+"service": false
+},
+{
+"id": "14.3",
+"num": 14,
+"numName": "Уравнение с отбором корней",
+"part": 2,
+"pts": 2,
+"name": "Иррациональные уравнения",
+"protos": 6,
+"total": 8,
+"lvl": 2,
+"lessons": 0.5,
+"prereq": [
+"7.3",
+"14.0"
+],
+"service": false
+},
+{
+"id": "14.4",
+"num": 14,
+"numName": "Уравнение с отбором корней",
+"part": 2,
+"pts": 2,
+"name": "Логарифмические уравнения",
+"protos": 11,
+"total": 24,
+"lvl": 2,
+"lessons": 1.0,
+"prereq": [
+"7.5",
+"14.0"
+],
+"service": false
+},
+{
+"id": "14.5",
+"num": 14,
+"numName": "Уравнение с отбором корней",
+"part": 2,
+"pts": 2,
+"name": "Тригонометрические уравнения, сводимые к квадратным",
+"protos": 72,
+"total": 170,
+"lvl": 2,
+"lessons": 2.0,
+"prereq": [
+"14.0",
+"8.10"
+],
+"service": false
+},
+{
+"id": "14.6",
+"num": 14,
+"numName": "Уравнение с отбором корней",
+"part": 2,
+"pts": 2,
+"name": "Тригонометрические уравнения, сводимые к однородным",
+"protos": 12,
+"total": 22,
+"lvl": 2,
+"lessons": 1.0,
+"prereq": [
+"14.5"
+],
+"service": false
+},
+{
+"id": "14.7",
+"num": 14,
+"numName": "Уравнение с отбором корней",
+"part": 2,
+"pts": 2,
+"name": "Тригонометрические уравнения, разложение на множители",
+"protos": 78,
+"total": 162,
+"lvl": 2,
+"lessons": 2.0,
+"prereq": [
+"14.5"
+],
+"service": false
+},
+{
+"id": "14.8",
+"num": 14,
+"numName": "Уравнение с отбором корней",
+"part": 2,
+"pts": 2,
+"name": "Тригонометрические уравнения, исследование ОДЗ",
+"protos": 53,
+"total": 109,
+"lvl": 3,
+"lessons": 2.0,
+"prereq": [
+"14.5",
+"14.7"
+],
+"service": false
+},
+{
+"id": "14.9",
+"num": 14,
+"numName": "Уравнение с отбором корней",
+"part": 2,
+"pts": 2,
+"name": "Тригонометрические уравнения, разные задачи",
+"protos": 63,
+"total": 89,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"14.5",
+"14.6",
+"14.7",
+"14.8"
+],
+"service": false
+},
+{
+"id": "14.10",
+"num": 14,
+"numName": "Уравнение с отбором корней",
+"part": 2,
+"pts": 2,
+"name": "Тригонометрия и иррациональности",
+"protos": 56,
+"total": 68,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"14.3",
+"14.5"
+],
+"service": false
+},
+{
+"id": "14.11",
+"num": 14,
+"numName": "Уравнение с отбором корней",
+"part": 2,
+"pts": 2,
+"name": "Тригонометрия и логарифмы",
+"protos": 43,
+"total": 73,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"14.4",
+"14.5"
+],
+"service": false
+},
+{
+"id": "14.12",
+"num": 14,
+"numName": "Уравнение с отбором корней",
+"part": 2,
+"pts": 2,
+"name": "Тригонометрия и показательные выражения",
+"protos": 45,
+"total": 77,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"14.1",
+"14.5"
+],
+"service": false
+},
+{
+"id": "14.13",
+"num": 14,
+"numName": "Уравнение с отбором корней",
+"part": 2,
+"pts": 2,
+"name": "Другие уравнения смешанного типа",
+"protos": 9,
+"total": 9,
+"lvl": 3,
+"lessons": 0.5,
+"prereq": [
+"14.1",
+"14.2",
+"14.3",
+"14.4",
+"14.5",
+"14.6",
+"14.7",
+"14.8",
+"14.9",
+"14.10",
+"14.11",
+"14.12"
+],
+"service": false
+},
+{
+"id": "15.0",
+"num": 15,
+"numName": "Стереометрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "[служебный] Аксиомы и теоремы стереометрии, оформление доказательства; координатный метод",
+"protos": 0,
+"total": 0,
+"lvl": 3,
+"lessons": 2.0,
+"prereq": [
+"2.1",
+"3.6",
+"3.7"
+],
+"service": true
+},
+{
+"id": "15.1",
+"num": 15,
+"numName": "Стереометрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Расстояние между прямыми и плоскостями",
+"protos": 48,
+"total": 65,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"15.0"
+],
+"service": false
+},
+{
+"id": "15.2",
+"num": 15,
+"numName": "Стереометрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Расстояние между точками, от точки до прямой",
+"protos": 27,
+"total": 49,
+"lvl": 2,
+"lessons": 1.0,
+"prereq": [
+"15.0"
+],
+"service": false
+},
+{
+"id": "15.3",
+"num": 15,
+"numName": "Стереометрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Расстояние от точки до плоскости",
+"protos": 68,
+"total": 100,
+"lvl": 3,
+"lessons": 2.0,
+"prereq": [
+"15.0"
+],
+"service": false
+},
+{
+"id": "15.4",
+"num": 15,
+"numName": "Стереометрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Сечения пирамид",
+"protos": 80,
+"total": 138,
+"lvl": 3,
+"lessons": 2.0,
+"prereq": [
+"15.0"
+],
+"service": false
+},
+{
+"id": "15.5",
+"num": 15,
+"numName": "Стереометрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Сечения призм",
+"protos": 36,
+"total": 60,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"15.0"
+],
+"service": false
+},
+{
+"id": "15.6",
+"num": 15,
+"numName": "Стереометрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Сечения параллелепипедов",
+"protos": 27,
+"total": 37,
+"lvl": 2,
+"lessons": 1.0,
+"prereq": [
+"15.0"
+],
+"service": false
+},
+{
+"id": "15.7",
+"num": 15,
+"numName": "Стереометрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Угол между плоскостями",
+"protos": 57,
+"total": 113,
+"lvl": 3,
+"lessons": 2.0,
+"prereq": [
+"15.0"
+],
+"service": false
+},
+{
+"id": "15.8",
+"num": 15,
+"numName": "Стереометрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Угол между плоскостями граней многогранника",
+"protos": 24,
+"total": 36,
+"lvl": 3,
+"lessons": 1.0,
+"prereq": [
+"15.7"
+],
+"service": false
+},
+{
+"id": "15.9",
+"num": 15,
+"numName": "Стереометрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Угол между прямой и плоскостью",
+"protos": 29,
+"total": 57,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"15.0"
+],
+"service": false
+},
+{
+"id": "15.10",
+"num": 15,
+"numName": "Стереометрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Угол между скрещивающимися прямыми",
+"protos": 27,
+"total": 44,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"15.0"
+],
+"service": false
+},
+{
+"id": "15.11",
+"num": 15,
+"numName": "Стереометрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Объёмы многогранников",
+"protos": 61,
+"total": 79,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"15.0",
+"3.6",
+"3.7"
+],
+"service": false
+},
+{
+"id": "15.12",
+"num": 15,
+"numName": "Стереометрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Сечения круглых тел",
+"protos": 3,
+"total": 5,
+"lvl": 3,
+"lessons": 0.5,
+"prereq": [
+"15.0",
+"3.9",
+"3.10",
+"3.11"
+],
+"service": false
+},
+{
+"id": "15.13",
+"num": 15,
+"numName": "Стереометрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Круглые тела: цилиндр, конус, шар",
+"protos": 37,
+"total": 49,
+"lvl": 3,
+"lessons": 1.0,
+"prereq": [
+"15.0",
+"3.9",
+"3.10",
+"3.11"
+],
+"service": false
+},
+{
+"id": "15.14",
+"num": 15,
+"numName": "Стереометрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Комбинации фигур",
+"protos": 19,
+"total": 27,
+"lvl": 3,
+"lessons": 1.0,
+"prereq": [
+"15.11",
+"15.13"
+],
+"service": false
+},
+{
+"id": "16.0",
+"num": 16,
+"numName": "Неравенство",
+"part": 2,
+"pts": 2,
+"name": "[служебный] Метод интервалов, ОДЗ, метод рационализации (таблица замен)",
+"protos": 0,
+"total": 0,
+"lvl": 2,
+"lessons": 1.5,
+"prereq": [
+"7.2",
+"8.4",
+"8.7"
+],
+"service": true
+},
+{
+"id": "16.1",
+"num": 16,
+"numName": "Неравенство",
+"part": 2,
+"pts": 2,
+"name": "Неравенства, содержащие радикалы",
+"protos": 17,
+"total": 33,
+"lvl": 2,
+"lessons": 1.0,
+"prereq": [
+"16.0",
+"7.3"
+],
+"service": false
+},
+{
+"id": "16.2",
+"num": 16,
+"numName": "Неравенство",
+"part": 2,
+"pts": 2,
+"name": "Рациональные неравенства",
+"protos": 47,
+"total": 130,
+"lvl": 2,
+"lessons": 2.0,
+"prereq": [
+"16.0"
+],
+"service": false
+},
+{
+"id": "16.3",
+"num": 16,
+"numName": "Неравенство",
+"part": 2,
+"pts": 2,
+"name": "Показательные неравенства",
+"protos": 43,
+"total": 118,
+"lvl": 2,
+"lessons": 1.5,
+"prereq": [
+"16.0",
+"7.4"
+],
+"service": false
+},
+{
+"id": "16.4",
+"num": 16,
+"numName": "Неравенство",
+"part": 2,
+"pts": 2,
+"name": "Неравенства рациональные относительно показательной функции",
+"protos": 58,
+"total": 127,
+"lvl": 2,
+"lessons": 2.0,
+"prereq": [
+"16.2",
+"16.3"
+],
+"service": false
+},
+{
+"id": "16.5",
+"num": 16,
+"numName": "Неравенство",
+"part": 2,
+"pts": 2,
+"name": "Логарифмические неравенства первой и второй степени",
+"protos": 52,
+"total": 113,
+"lvl": 2,
+"lessons": 2.0,
+"prereq": [
+"16.0",
+"7.5"
+],
+"service": false
+},
+{
+"id": "16.6",
+"num": 16,
+"numName": "Неравенство",
+"part": 2,
+"pts": 2,
+"name": "Неравенства рациональные относительно логарифмической функции",
+"protos": 41,
+"total": 70,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"16.2",
+"16.5"
+],
+"service": false
+},
+{
+"id": "16.7",
+"num": 16,
+"numName": "Неравенство",
+"part": 2,
+"pts": 2,
+"name": "Неравенства с логарифмами по переменному основанию",
+"protos": 64,
+"total": 99,
+"lvl": 3,
+"lessons": 2.0,
+"prereq": [
+"16.5"
+],
+"service": false
+},
+{
+"id": "16.8",
+"num": 16,
+"numName": "Неравенство",
+"part": 2,
+"pts": 2,
+"name": "Неравенства с логарифмами по переменному основанию, применение рационализации",
+"protos": 39,
+"total": 64,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"16.7"
+],
+"service": false
+},
+{
+"id": "16.9",
+"num": 16,
+"numName": "Неравенство",
+"part": 2,
+"pts": 2,
+"name": "Логарифмические неравенства, разные задачи",
+"protos": 31,
+"total": 50,
+"lvl": 3,
+"lessons": 1.0,
+"prereq": [
+"16.5",
+"16.6",
+"16.7",
+"16.8"
+],
+"service": false
+},
+{
+"id": "16.10",
+"num": 16,
+"numName": "Неравенство",
+"part": 2,
+"pts": 2,
+"name": "Показательные выражения и иррациональности",
+"protos": 15,
+"total": 19,
+"lvl": 3,
+"lessons": 1.0,
+"prereq": [
+"16.1",
+"16.3"
+],
+"service": false
+},
+{
+"id": "16.11",
+"num": 16,
+"numName": "Неравенство",
+"part": 2,
+"pts": 2,
+"name": "Логарифмы и показательные выражения",
+"protos": 54,
+"total": 85,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"16.3",
+"16.5"
+],
+"service": false
+},
+{
+"id": "16.12",
+"num": 16,
+"numName": "Неравенство",
+"part": 2,
+"pts": 2,
+"name": "Логарифмы и иррациональности",
+"protos": 16,
+"total": 19,
+"lvl": 3,
+"lessons": 1.0,
+"prereq": [
+"16.1",
+"16.5"
+],
+"service": false
+},
+{
+"id": "16.13",
+"num": 16,
+"numName": "Неравенство",
+"part": 2,
+"pts": 2,
+"name": "Неравенства с тригонометрией",
+"protos": 6,
+"total": 7,
+"lvl": 3,
+"lessons": 0.5,
+"prereq": [
+"16.0",
+"14.5"
+],
+"service": false
+},
+{
+"id": "16.14",
+"num": 16,
+"numName": "Неравенство",
+"part": 2,
+"pts": 2,
+"name": "Неравенства с модулем",
+"protos": 28,
+"total": 44,
+"lvl": 3,
+"lessons": 1.0,
+"prereq": [
+"16.2"
+],
+"service": false
+},
+{
+"id": "16.15",
+"num": 16,
+"numName": "Неравенство",
+"part": 2,
+"pts": 2,
+"name": "Другие неравенства смешанного типа",
+"protos": 36,
+"total": 49,
+"lvl": 3,
+"lessons": 1.0,
+"prereq": [
+"16.1",
+"16.2",
+"16.3",
+"16.4",
+"16.5",
+"16.6",
+"16.7",
+"16.8",
+"16.9",
+"16.10",
+"16.11",
+"16.12",
+"16.13",
+"16.14"
+],
+"service": false
+},
+{
+"id": "17.1",
+"num": 17,
+"numName": "Прикладная задача: модель и её исследование (НОВОЕ в 2027)",
+"part": 2,
+"pts": 2,
+"name": "Задачи на оптимальный выбор / наибольшее-наименьшее значение через производную (по демоверсии: мощность на нагрузке, амплитуда колебаний)",
+"protos": 28,
+"total": 38,
+"lvl": 3,
+"lessons": 3.0,
+"prereq": [
+"9.0",
+"9.3",
+"10.1",
+"10.2",
+"10.3",
+"10.4",
+"10.5",
+"10.6",
+"10.7",
+"10.8"
+],
+"service": false
+},
+{
+"id": "18.0",
+"num": 18,
+"numName": "Планиметрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "[служебный] Опорные теоремы планиметрии (подобие, вписанные углы, свойства биссектрис, теоремы синусов/косинусов), оформление доказательства",
+"protos": 0,
+"total": 0,
+"lvl": 3,
+"lessons": 2.0,
+"prereq": [
+"1.1",
+"1.2",
+"1.3",
+"1.4",
+"1.5",
+"1.6",
+"1.7",
+"1.8",
+"1.9"
+],
+"service": true
+},
+{
+"id": "18.1",
+"num": 18,
+"numName": "Планиметрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Треугольники и их свойства",
+"protos": 86,
+"total": 140,
+"lvl": 3,
+"lessons": 2.0,
+"prereq": [
+"18.0"
+],
+"service": false
+},
+{
+"id": "18.2",
+"num": 18,
+"numName": "Планиметрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Четырехугольники и их свойства",
+"protos": 87,
+"total": 124,
+"lvl": 3,
+"lessons": 2.0,
+"prereq": [
+"18.0"
+],
+"service": false
+},
+{
+"id": "18.3",
+"num": 18,
+"numName": "Планиметрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Окружности и системы окружностей",
+"protos": 53,
+"total": 88,
+"lvl": 3,
+"lessons": 2.0,
+"prereq": [
+"18.0"
+],
+"service": false
+},
+{
+"id": "18.4",
+"num": 18,
+"numName": "Планиметрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Вписанные окружности и треугольники",
+"protos": 43,
+"total": 71,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"18.1",
+"18.3"
+],
+"service": false
+},
+{
+"id": "18.5",
+"num": 18,
+"numName": "Планиметрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Описанные окружности и треугольники",
+"protos": 33,
+"total": 48,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"18.1",
+"18.3"
+],
+"service": false
+},
+{
+"id": "18.6",
+"num": 18,
+"numName": "Планиметрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Окружности и треугольники, разные задачи",
+"protos": 43,
+"total": 68,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"18.4",
+"18.5"
+],
+"service": false
+},
+{
+"id": "18.7",
+"num": 18,
+"numName": "Планиметрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Вписанные окружности и четырехугольники",
+"protos": 41,
+"total": 67,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"18.2",
+"18.3"
+],
+"service": false
+},
+{
+"id": "18.8",
+"num": 18,
+"numName": "Планиметрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Описанные окружности и четырехугольники",
+"protos": 20,
+"total": 26,
+"lvl": 3,
+"lessons": 1.0,
+"prereq": [
+"18.2",
+"18.3"
+],
+"service": false
+},
+{
+"id": "18.9",
+"num": 18,
+"numName": "Планиметрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Окружности и четырехугольники, разные задачи",
+"protos": 41,
+"total": 61,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"18.7",
+"18.8"
+],
+"service": false
+},
+{
+"id": "18.10",
+"num": 18,
+"numName": "Планиметрическая задача (доказательство + вычисление)",
+"part": 2,
+"pts": 3,
+"name": "Разные задачи о многоугольниках",
+"protos": 10,
+"total": 11,
+"lvl": 3,
+"lessons": 1.0,
+"prereq": [
+"18.1",
+"18.2"
+],
+"service": false
+},
+{
+"id": "19.0",
+"num": 19,
+"numName": "Задача с параметром",
+"part": 2,
+"pts": 4,
+"name": "[служебный] Что такое параметр; графический метод в (x, y); семейства прямых и окружностей",
+"protos": 0,
+"total": 0,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"12.1",
+"12.2",
+"12.3",
+"7.1"
+],
+"service": true
+},
+{
+"id": "19.1",
+"num": 19,
+"numName": "Задача с параметром",
+"part": 2,
+"pts": 4,
+"name": "Уравнения с параметром",
+"protos": 48,
+"total": 74,
+"lvl": 3,
+"lessons": 2.0,
+"prereq": [
+"19.0"
+],
+"service": false
+},
+{
+"id": "19.2",
+"num": 19,
+"numName": "Задача с параметром",
+"part": 2,
+"pts": 4,
+"name": "Уравнения с параметром, содержащие модуль",
+"protos": 52,
+"total": 94,
+"lvl": 3,
+"lessons": 2.0,
+"prereq": [
+"19.1",
+"16.14"
+],
+"service": false
+},
+{
+"id": "19.3",
+"num": 19,
+"numName": "Задача с параметром",
+"part": 2,
+"pts": 4,
+"name": "Уравнения с параметром, содержащие радикалы",
+"protos": 41,
+"total": 82,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"19.1",
+"16.1"
+],
+"service": false
+},
+{
+"id": "19.4",
+"num": 19,
+"numName": "Задача с параметром",
+"part": 2,
+"pts": 4,
+"name": "Неравенства с параметром",
+"protos": 16,
+"total": 22,
+"lvl": 3,
+"lessons": 1.0,
+"prereq": [
+"19.1",
+"16.2"
+],
+"service": false
+},
+{
+"id": "19.5",
+"num": 19,
+"numName": "Задача с параметром",
+"part": 2,
+"pts": 4,
+"name": "Системы с параметром",
+"protos": 96,
+"total": 141,
+"lvl": 3,
+"lessons": 2.0,
+"prereq": [
+"19.1",
+"19.11"
+],
+"service": false
+},
+{
+"id": "19.6",
+"num": 19,
+"numName": "Задача с параметром",
+"part": 2,
+"pts": 4,
+"name": "Расположение корней квадратного трехчлена",
+"protos": 17,
+"total": 19,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"19.1",
+"12.2"
+],
+"service": false
+},
+{
+"id": "19.7",
+"num": 19,
+"numName": "Задача с параметром",
+"part": 2,
+"pts": 4,
+"name": "Использование симметрий",
+"protos": 33,
+"total": 50,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"19.1"
+],
+"service": false
+},
+{
+"id": "19.8",
+"num": 19,
+"numName": "Задача с параметром",
+"part": 2,
+"pts": 4,
+"name": "Использование монотонности, оценок",
+"protos": 41,
+"total": 62,
+"lvl": 3,
+"lessons": 2.0,
+"prereq": [
+"19.1",
+"9.3"
+],
+"service": false
+},
+{
+"id": "19.9",
+"num": 19,
+"numName": "Задача с параметром",
+"part": 2,
+"pts": 4,
+"name": "Аналитическое решение уравнений и неравенств",
+"protos": 81,
+"total": 117,
+"lvl": 3,
+"lessons": 2.0,
+"prereq": [
+"19.1",
+"19.4"
+],
+"service": false
+},
+{
+"id": "19.10",
+"num": 19,
+"numName": "Задача с параметром",
+"part": 2,
+"pts": 4,
+"name": "Аналитическое решение систем",
+"protos": 32,
+"total": 50,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"19.5",
+"19.9"
+],
+"service": false
+},
+{
+"id": "19.11",
+"num": 19,
+"numName": "Задача с параметром",
+"part": 2,
+"pts": 4,
+"name": "Координаты (x, a)",
+"protos": 15,
+"total": 28,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"19.0"
+],
+"service": false
+},
+{
+"id": "19.12",
+"num": 19,
+"numName": "Задача с параметром",
+"part": 2,
+"pts": 4,
+"name": "Уравнение окружности",
+"protos": 50,
+"total": 86,
+"lvl": 3,
+"lessons": 2.0,
+"prereq": [
+"19.0",
+"19.5"
+],
+"service": false
+},
+{
+"id": "19.13",
+"num": 19,
+"numName": "Задача с параметром",
+"part": 2,
+"pts": 4,
+"name": "Расстояние между точками",
+"protos": 7,
+"total": 9,
+"lvl": 3,
+"lessons": 1.0,
+"prereq": [
+"19.12"
+],
+"service": false
+},
+{
+"id": "19.14",
+"num": 19,
+"numName": "Задача с параметром",
+"part": 2,
+"pts": 4,
+"name": "Функции, зависящие от параметра",
+"protos": 38,
+"total": 64,
+"lvl": 3,
+"lessons": 2.0,
+"prereq": [
+"19.1",
+"9.3"
+],
+"service": false
+},
+{
+"id": "20.0",
+"num": 20,
+"numName": "Числа и их свойства",
+"part": 2,
+"pts": 4,
+"name": "[служебный] Делимость, остатки, НОД/НОК, оценка + пример, принцип Дирихле (база)",
+"protos": 0,
+"total": 0,
+"lvl": 3,
+"lessons": 1.5,
+"prereq": [
+"8.1"
+],
+"service": true
+},
+{
+"id": "20.1",
+"num": 20,
+"numName": "Числа и их свойства",
+"part": 2,
+"pts": 4,
+"name": "Числа и их свойства",
+"protos": 218,
+"total": 339,
+"lvl": 3,
+"lessons": 4.0,
+"prereq": [
+"20.0"
+],
+"service": false
+},
+{
+"id": "20.2",
+"num": 20,
+"numName": "Числа и их свойства",
+"part": 2,
+"pts": 4,
+"name": "Числовые наборы на карточках и досках",
+"protos": 73,
+"total": 122,
+"lvl": 3,
+"lessons": 2.0,
+"prereq": [
+"20.0"
+],
+"service": false
+},
+{
+"id": "20.3",
+"num": 20,
+"numName": "Числа и их свойства",
+"part": 2,
+"pts": 4,
+"name": "Последовательности и прогрессии",
+"protos": 66,
+"total": 91,
+"lvl": 3,
+"lessons": 2.0,
+"prereq": [
+"20.0",
+"11.6"
+],
+"service": false
+},
+{
+"id": "20.4",
+"num": 20,
+"numName": "Числа и их свойства",
+"part": 2,
+"pts": 4,
+"name": "Сюжетные задачи: кино, театр, мотки верёвки",
+"protos": 112,
+"total": 179,
+"lvl": 3,
+"lessons": 2.5,
+"prereq": [
+"20.0"
+],
+"service": false
+}
+];
+(function () {
+  const app = document.getElementById('app');
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const SUB = Object.fromEntries(SUBS.map(s => [s.id, s]));
+  const NUMNAME = {}; SUBS.forEach(s => { NUMNAME[s.num] = NUMNAME[s.num] || s.numName.replace(/\s*\(НОВОЕ.*$/, ''); });
+  const STL = { know: 'знает', partial: 'частично', gap: 'не знает', skip: 'не приступал', unknown: 'не проверено' };
+  const KIND = { core: 'новая тема', review: 'закрепление', cut: 'срез', variant: 'вариант ЕГЭ', deep: 'отработка' };
+  const DEMO = 'E1-C72-CC7K8VREN';
+  const nTasks = (ver, v) => { if (ver !== DATA.version) throw new Error(`Код от другой версии пробника (v${ver}, сейчас v${DATA.version})`); return DATA.variants[v].ids.length; };
+  const defWeeks = () => { const now = new Date(); let ex = new Date(now.getFullYear(), 5, 1); if (ex - now < 4 * 6048e5) ex = new Date(now.getFullYear() + 1, 5, 1); return Math.max(4, Math.round((ex - now) / 6048e5)); };
+  let S = { step: 1, name: 'Алексей', open: new Set(), trial: {}, trialSub: {}, lesson: null, budget: 45, ready: false, code: DEMO, d: null, an: null, err: '', marks: {}, cfg: { goal: 72, perWeek: 2, weeks: defWeeks(), mode: 'standard' } };
+
+  function decode() {
+    S.err = ''; S.d = null; S.an = null;
+    try {
+      S.d = CoreEGE.decode(S.code, nTasks);
+      const ids = DATA.variants[S.d.variant].ids;
+      S.an = RouteEGE.analyze(ids, S.d.states, DATA.tasks, SUBS);
+      S.cfg.goal = S.d.goal || S.cfg.goal;
+    } catch (e) { S.err = e.message; }
+  }
+
+  function view() {
+    const st = S.an ? RouteEGE.buildMap(SUBS, S.an.site, S.marks) : null;
+    app.innerHTML = `<div class="top"><h1>Маршрут ученика · ЕГЭ</h1>
+      <div class="codein"><input id="code" value="${esc(S.code)}" placeholder="Код из пробника" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Код результата"><button class="primary" id="go">Открыть</button></div>
+      ${S.err ? `<p class="err">${esc(S.err)}</p>` : ''}${S.code === DEMO && !S.err ? '<p class="hint">Пример кода. Вставьте код ученика.</p>' : ''}</div>
+      ${S.an ? body(st) : ''}`;
+    const go = () => { S.code = document.getElementById('code').value.trim().toUpperCase(); S.marks = {}; S.trial = {}; S.trialSub = {}; S.lesson = null; S.ready = false; S.step = 1; decode(); view(); };
+    document.getElementById('go').onclick = go;
+    document.getElementById('code').onkeydown = e => { if (e.key === 'Enter') go(); };
+    if (!S.an) return;
+    const keep = fn => () => { const y = scrollY; fn(); view(); scrollTo(0, y); };
+    app.querySelectorAll('[data-step]').forEach(b => b.onclick = () => { S.step = +b.dataset.step; view(); const t = document.getElementById('steps'); if (t) t.scrollIntoView({ block: 'start' }); });
+    app.querySelectorAll('[data-cfg]').forEach(el => el.onchange = () => { S.cfg[el.dataset.cfg] = Math.max(+el.min || 0, Math.min(+el.max || 999, +el.value || 0)); keep(() => {})(); });
+    app.querySelectorAll('[data-pw]').forEach(b => b.onclick = keep(() => { S.cfg.perWeek = +b.dataset.pw; }));
+    app.querySelectorAll('[data-mode]').forEach(b => b.onclick = keep(() => { S.cfg.mode = b.dataset.mode; }));
+    app.querySelectorAll('.marks button[data-id]').forEach(b => b.onclick = keep(() => { const id = b.dataset.id, m = b.dataset.m; if (S.marks[id] === m) delete S.marks[id]; else S.marks[id] = m; }));
+    app.querySelectorAll('[data-num]').forEach(b => b.onclick = e => {
+      e.preventDefault(); e.stopPropagation();
+      keep(() => {
+        // массовая отметка трогает только непроверенное: пробник, пробное занятие и выведенное из них не меняем
+        const n = +b.dataset.num, m = b.dataset.m, fromTrial = new Set(Object.keys(S.trialSub));
+        const cur = RouteEGE.buildMap(SUBS, S.an.site, S.marks);
+        SUBS.filter(s => s.num === n && !s.service && !S.an.site[s.id] && !fromTrial.has(s.id) && cur[s.id].source !== 'inferred').forEach(s => { if (m === 'clear') delete S.marks[s.id]; else S.marks[s.id] = m; });
+        S.open.add(n);
+      })();
+    });
+    app.querySelectorAll('details[data-n]').forEach(d => d.addEventListener('toggle', () => { const n = +d.dataset.n; if (d.open) S.open.add(n); else S.open.delete(n); }));
+    app.querySelectorAll('[data-tr]').forEach(b => b.onclick = keep(() => {
+      const tid = b.dataset.tr, r = b.dataset.r, sub = b.dataset.sub;
+      if (S.trial[tid] === r) { delete S.trial[tid]; delete S.marks[sub]; delete S.trialSub[sub]; }
+      else { S.trial[tid] = r; S.marks[sub] = r === 'ok' ? 'know' : 'gap'; S.trialSub[sub] = true; }
+    }));
+    const bud = document.getElementById('bud'); if (bud) bud.onchange = keep(() => { S.budget = +bud.value; S.lesson = null; });
+    const nm = document.getElementById('stName');
+    if (nm) nm.oninput = () => { S.name = nm.value; const el = document.getElementById('docName'); if (el) el.textContent = S.name.trim() || 'Ученик'; };
+    const pdfBtn = document.getElementById('pdfBtn');
+    if (pdfBtn) pdfBtn.onclick = () => makePdf(pdfBtn);
+  }
+  function marksHtml(id) {
+    const cur = S.marks[id];
+    return `<span class="marks">${[['know', '✔', 'знает'], ['partial', '½', 'частично'], ['gap', '✘', 'не знает']].map(([m, l, t]) => `<button data-id="${id}" data-m="${m}" aria-pressed="${cur === m}" title="${t}" aria-label="${t}: ${id}">${l}</button>`).join('')}</span>`;
+  }
+  const SITEL = { know: 'решил', partial: 'частично', gap: 'не решил', skip: 'не приступал' };
+  const stBadge = x => {
+    const main = `<span class="st ${x.status}${x.source === 'inferred' ? ' inf' : ''}">${STL[x.status]}${x.source === 'inferred' ? ' (выведено)' : x.source === 'tutor' ? ' · репетитор' : ''}</span>`;
+    return x.site && x.source === 'tutor' && x.tutor !== x.site ? main + ` <span class="st unknown">пробник: ${SITEL[x.site]}</span>` : main;
+  };
+  const REASON = { 'дыра': 'проверить дыру', 'разведка': 'разведка', 'выше цели': 'выше цели' };
+  const SPEED = { A: 1.3, B: 1.15, C: 1, D: 0.85, E: 0.75 };
+
+  // ---------- документ для ученика и родителя ----------
+  const MONTHS = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
+  const short = t => String(t).replace(/\s*\(.*$/, '');
+  const fmtD = d => d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+  function docHtml(st, P) {
+    const d = S.d, an = S.an, cfg = S.cfg, f = P.forecast, V = DATA.variants[d.variant];
+    const today = new Date();
+    const dateOf = w => new Date(today.getTime() + (w - 1) * 7 * 864e5);
+    // что уже получается: решённые в пробнике подтипы
+    const good = Object.entries(an.site).filter(([, v]) => v === 'know').map(([id]) => SUB[id]).filter(Boolean);
+    const startL = RouteEGE.startList(SUBS, st, P.sel.numbers).slice(0, 8);
+    // план по месяцам
+    const months = [];
+    P.lessons.forEach(l => {
+      const dt = dateOf(l.week), key = dt.getFullYear() * 12 + dt.getMonth();
+      let m = months.find(x => x.key === key);
+      if (!m) { m = { key, name: MONTHS[dt.getMonth()] + ' ' + dt.getFullYear(), n: 0, nums: new Set(), cuts: [], variants: 0, review: 0 }; months.push(m); }
+      m.n++;
+      if (l.kind === 'core') l.parts.forEach(p => m.nums.add(SUB[p.id] ? SUB[p.id].num : p.id));
+      if (l.kind === 'review') m.review++;
+      if (l.kind === 'cut') m.cuts.push(fmtD(dateOf(l.week)));
+      if (l.kind === 'variant') m.variants++;
+    });
+    const nm = (S.name || '').trim() || 'Ученик';
+    const pos = x => Math.max(0, Math.min(100, x));
+    const numsTxt = set => [...set].sort((a, b) => a - b).map(n => `№${n}`).join(', ');
+    const examD = dateOf(cfg.weeks + 1);
+    const trialN = Object.keys(S.marks).length;
+    return `<div class="doc" id="doc">
+      <div class="dhead"><div><div class="dk">Маршрут подготовки к ЕГЭ</div><div class="dt">Математика, профильный уровень · 2027</div></div><div class="dd">${fmtD(today)} ${today.getFullYear()}</div></div>
+      <div class="dname" id="docName">${esc(nm)}</div>
+
+      <div class="dsec"><div class="dh">Итоги пробника</div>
+        <div class="dgrid"><div><b>${an.ok} из ${an.total}</b><span>заданий решено верно</span></div><div><b>${d.minutes} мин</b><span>заняла работа</span></div><div><b>${cfg.goal}</b><span>баллов — цель</span></div></div>
+        <table class="dtab"><thead><tr><th>Задание ЕГЭ</th><th>Тема</th><th>Результат</th></tr></thead><tbody>
+        ${an.byNum.map(b => `<tr><td>№${b.num}</td><td>${esc(NUMNAME[b.num])}</td><td>${b.ok === b.total ? '<span class="g">решено</span>' : b.ok ? `<span class="y">${b.ok} из ${b.total}</span>` : b.skip === b.total ? '<span class="r">не приступал(а)</span>' : '<span class="r">не решено</span>'}</td></tr>`).join('')}
+        </tbody></table></div>
+
+      <div class="dsec"><div class="dh">Где мы сейчас и куда идём</div>
+        <div class="dscale"><div class="dtrack"></div><div class="dfill" style="left:${pos(f.now.test)}%;width:${Math.max(0, pos(f.after.test) - pos(f.now.test))}%"></div>
+          <div class="dmk" style="left:${pos(f.now.test)}%">сейчас ≈ ${f.now.test}</div><div class="dmk up" style="left:${pos(f.after.test)}%">к ЕГЭ ≈ ${f.after.test}</div>
+          <div class="dgoal" style="left:${pos(cfg.goal)}%">цель ${cfg.goal}</div></div>
+        <p>Сейчас ${esc(nm)} набрал(а) бы на ЕГЭ около <b>${f.now.test}</b> баллов. Если заниматься по плану ${cfg.perWeek} ${cfg.perWeek === 1 ? 'раз' : 'раза'} в неделю до экзамена, ожидаем около <b>${f.after.test}</b> баллов${f.after.test >= cfg.goal ? ` — это цель ${cfg.goal} с запасом.` : `. Цель ${cfg.goal} при таком темпе пока не набирается — обсудим с репетитором, как её взять.`}</p>
+        <p class="dsm">Прогноз — расчёт по результатам пробника и нормам подготовки, а не гарантия. Мы уточняем его на каждом срезе.</p></div>
+
+      <div class="dsec two"><div><div class="dh">Что уже получается</div>${good.length ? `<ul>${good.slice(0, 8).map(s => `<li>${esc(short(s.name))} <span class="dsm">· №${s.num}</span></li>`).join('')}</ul>` : '<p>Пока мало решённых заданий — начнём с основ.</p>'}</div>
+        <div><div class="dh">С чего начинаем</div>${startL.length ? `<ol>${startL.map(x => `<li>${esc(short(x.name))} <span class="dsm">· №${x.num}</span></li>`).join('')}</ol>` : '<p>Явных пробелов нет — идём дальше по программе.</p>'}</div></div>
+
+      <div class="dsec"><div class="dh">План по месяцам</div>
+        <p>${cfg.perWeek} ${cfg.perWeek === 1 ? 'занятие' : 'занятия'} в неделю по 60 минут · всего ${P.lessons.length} ${P.lessons.length % 10 === 1 && P.lessons.length % 100 !== 11 ? 'занятие' : 'занятий'} до ЕГЭ (≈ ${fmtD(examD)}).</p>
+        <table class="dtab"><thead><tr><th>Месяц</th><th>Занятий</th><th>Что проходим</th></tr></thead><tbody>
+        ${months.map(m => `<tr><td>${m.name}</td><td>${m.n}</td><td>${m.nums.size ? 'Новые темы: ' + numsTxt(m.nums) + '. ' : ''}${m.review ? 'Закрепление пройденного. ' : ''}${m.cuts.length ? `Срез ${m.cuts.join(', ')} и отчёт родителю. ` : ''}${m.variants ? `Полные варианты ЕГЭ на время с разбором: ${Math.ceil(m.variants / 2)}.` : ''}</td></tr>`).join('')}
+        </tbody></table></div>
+
+      <div class="dsec"><div class="dh">Что важно для результата</div>
+        <ul><li>Домашнее задание после каждого занятия — без него прогноз не сработает.</li>
+        <li>Раз в ${RouteEGE.MODES[P.mode].cut} недель — срез: проверяем пройденное и присылаем родителю короткий отчёт.</li>
+        <li>В последние недели — полные варианты ЕГЭ на время, чтобы привыкнуть к формату экзамена.</li></ul></div>
+      <div class="dfoot"><span>${trialN ? `Учтены итоги пробного занятия: ${trialN} отметок репетитора.` : ''}</span><span>Код пробника: ${esc(S.code)}</span></div>
+    </div>`;
+  }
+  function makePdf(btn) {
+    const note = document.getElementById('pdfNote'), el = document.getElementById('doc');
+    if (!window.html2pdf) { note.textContent = 'Не загрузилась библиотека PDF — проверьте интернет.'; return; }
+    const nm = ((S.name || '').trim() || 'ученик').replace(/[^\p{L}\p{N} _-]/gu, '');
+    btn.disabled = true; note.textContent = 'Собираю PDF…';
+    html2pdf().set({ margin: [10, 10, 12, 10], filename: `Маршрут ЕГЭ — ${nm}.pdf`, image: { type: 'jpeg', quality: 0.96 }, html2canvas: { scale: 2, backgroundColor: '#ffffff' }, jsPDF: { unit: 'mm', format: 'a4' }, pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.dsec .dh', '.dscale', '.dgrid'] } })
+      .from(el).save().then(() => { note.textContent = 'Готово. Если файл не появился — здесь, в предпросмотре, скачивание закрыто; на сайте работает.'; btn.disabled = false; })
+      .catch(() => { note.textContent = 'Не получилось собрать PDF.'; btn.disabled = false; });
+  }
+
+  const help = (t) => `<details class="help"><summary aria-label="Как это работает">?</summary><div>${t}</div></details>`;
+  function body(st) {
+    const d = S.d, an = S.an, cfg = S.cfg, V = DATA.variants[d.variant];
+    const P = RouteEGE.plan(SUBS, st, cfg);
+    const A = RouteEGE.advise(SUBS, st, cfg);
+    const f = P.forecast, sel = P.sel;
+    if (!S.lesson) {
+      const st0 = RouteEGE.buildMap(SUBS, an.site, {});
+      const P0 = RouteEGE.plan(SUBS, st0, cfg);
+      S.lesson = RouteEGE.pickLesson(SUBS, st0, DATA.bank, { numbers: P0.sel.numbers, seen: new Set(V.ids), budgetMin: S.budget, speed: SPEED[d.variant] });
+    }
+    const L = S.lesson, BANK = Object.fromEntries(DATA.bank.map(b => [b.id, b]));
+    const reach = f.after.test >= cfg.goal;
+    const nMarks = Object.keys(S.marks).length, nTrial = Object.keys(S.trial).length, nPicks = L.picks.filter(x => x.task).length;
+    const STEPS = [[1, 'Пробное', nTrial ? '•' : ''], [2, 'Знания', nMarks ? '•' : ''], [3, 'План', ''], [4, 'PDF', '']];
+    const head = `
+      <div class="tiles">
+        <div class="tile"><span>Решено в пробнике</span><b>${an.ok} из ${an.total}</b><small>вариант ${d.variant}</small></div>
+        <div class="tile"><span>Цель ученика</span><b>${cfg.goal}</b><small>баллов</small></div>
+        <div class="tile"><span>Сейчас</span><b>≈ ${f.now.test}</b><small>баллов</small></div>
+        <div class="tile"><span>Время пробника</span><b>${d.minutes} мин</b><small>норма ${V.limit}</small></div>
+      </div>
+      <nav class="steps" id="steps">${STEPS.map(([n, t, c]) => `<button data-step="${n}" class="${c ? 'done' : ''}" aria-current="${S.step === n ? 'step' : 'false'}">${c ? '✓' : n + '.'} ${t}</button>`).join('')}</nav>`;
+    const next = n => n <= 4 ? `<button class="primary next" data-step="${n}">Далее: ${STEPS[n - 1][1]} →</button>` : '';
+    let main = '';
+    if (S.step === 1) {
+      main = `<div class="sh"><h2>Что дать на пробном занятии</h2>${help('Сначала — дыры из пробника, под которыми нет других дыр: проверяем, не знает или ошибся. Потом — непроверенные темы под цель, самые частые на экзамене. Задания из пробника не повторяются. ✔ — решил сам, без подсказок.')}</div>
+        <div class="row"><select id="bud" aria-label="Время на задания">${[30, 45, 60].map(m => `<option value="${m}" ${m === S.budget ? 'selected' : ''}>${m} минут</option>`).join('')}</select><span class="hint">${nPicks} заданий · ≈ ${L.minutes} мин</span></div>
+        <ol class="list">${L.picks.map(x => {
+          const s = SUB[x.sub], b = x.task ? BANK[x.task] : null, r = x.task ? S.trial[x.task] : null;
+          return `<li class="${r || ''}"><div class="t"><b>№${s.num}</b> ${esc(short(s.name))}
+            ${b ? `<div class="sub">${b.link ? `<a href="${esc(b.link)}" target="_blank" rel="noopener">открыть задание</a>` : 'своё задание'} · ответ <code>${esc(b.ans)}</code> · ${x.minutes} мин</div>` : '<div class="sub">нет задания в банке — дайте своё</div>'}</div>
+            ${b ? `<span class="marks"><button data-tr="${b.id}" data-sub="${s.id}" data-r="ok" aria-pressed="${r === 'ok'}" aria-label="Решил">✔</button><button data-tr="${b.id}" data-sub="${s.id}" data-r="bad" aria-pressed="${r === 'bad'}" aria-label="Не решил">✘</button></span>` : ''}</li>`;
+        }).join('')}</ol>${next(2)}`;
+    } else if (S.step === 2) {
+      main = `<div class="sh"><h2>Что ученик знает</h2>${help('Отметьте, что увидели на занятии. «✔ остальные» в строке номера отмечает только непроверенные подтипы: результаты пробника и пробного занятия не меняются. Поправить отдельную тему можно внутри номера.')}</div>
+        <div class="legend"><span class="st know">знает</span><span class="st partial">частично</span><span class="st gap">не знает</span><span class="st unknown">не проверено</span></div>
+        ${[...new Set(SUBS.map(s => s.num))].map(n => {
+          const ss = SUBS.filter(s => s.num === n && !s.service);
+          const c = { know: 0, partial: 0, gap: 0, unknown: 0 }; ss.forEach(s => { const x = st[s.id].status; c[x === 'skip' ? 'gap' : x]++; });
+          const bar = ['know', 'partial', 'gap', 'unknown'].map(k => c[k] ? `<i class="${k}" style="flex:${c[k]}"></i>` : '').join('');
+          return `<details data-n="${n}" ${S.open.has(n) ? 'open' : ''}><summary><span class="nh"><b>№${n}</b> ${esc(NUMNAME[n])}</span><span class="mbar" aria-label="знает ${c.know} из ${ss.length}">${bar}</span></summary>
+            <div class="bulk"><span class="hint">Непроверенные:</span>${[['know', '✔ знает'], ['partial', '½ частично'], ['gap', '✘ не знает'], ['clear', '↺']].map(([m, l]) => `<button data-num="${n}" data-m="${m}">${l}</button>`).join('')}</div>
+            <ul class="subs">${ss.map(s => `<li><span class="t"><b>${s.id}</b> ${esc(short(s.name))}<br>${stBadge(st[s.id])}</span>${marksHtml(s.id)}</li>`).join('')}</ul></details>`;
+        }).join('')}${next(3)}`;
+    } else if (S.step === 3) {
+      const pos = x => Math.max(0, Math.min(100, x));
+      const rec = A.standard || A.express;
+      main = `<div class="fcbig ${reach ? 'ok' : 'no'}">
+          <div><span>Сейчас</span><b>${f.now.test}</b></div><div class="arr">→</div><div><span>К ЕГЭ</span><b>${f.after.test}</b></div><div class="g"><span>Цель</span><b>${cfg.goal}</b><em>${reach ? '✓ берётся' : '✗ не берётся'}</em></div>
+        </div>
+        ${!reach ? `<p class="warnline">${rec ? `Цель берётся при <b>${rec.pw} занятиях в неделю</b>${rec === A.express ? ' в экспрессе' : ''}.` : 'Цель не берётся даже при 4 занятиях в неделю — обсудите цель.'}</p>` : ''}
+        <div class="sh"><h2>Темп</h2>${help('Прогноз к ЕГЭ при выбранном числе занятий. Стандарт — стабильная подготовка: все частые и редкие темы, закрепление. Экспресс — когда времени мало: только самые частые темы. Ученик и родитель режим не видят.')}</div>
+        <div class="seg" role="group" aria-label="Занятий в неделю">${[1, 2, 3, 4].map(pw => { const x = A.table[P.mode][pw - 1]; return `<button data-pw="${pw}" aria-pressed="${cfg.perWeek === pw}"><b>${pw}×</b><small>в неделю</small><span>≈ ${x.after}${x.reach ? ' ✓' : ''}</span></button>`; }).join('')}</div>
+        <div class="seg two" role="group" aria-label="Режим">${['standard', 'express'].map(m => { const x = A.table[m][cfg.perWeek - 1]; return `<button data-mode="${m}" aria-pressed="${P.mode === m}">${m === 'standard' ? 'Стандарт' : 'Экспресс'}<span>≈ ${x.after}${x.reach ? ' ✓' : ''}</span></button>`; }).join('')}</div>
+        <div class="row small"><label>Цель <input type="number" min="27" max="100" data-cfg="goal" value="${cfg.goal}" inputmode="numeric"></label><label>Недель до ЕГЭ <input type="number" min="4" max="60" data-cfg="weeks" value="${cfg.weeks}" inputmode="numeric"></label></div>
+        <h2>Номера в плане</h2>
+        <p class="nums">${sel.numbers.map(n => `<span>№${n}</span>`).join('') || '<span>все нужные уже знает</span>'}</p>
+        <h2>План · ${P.lessons.length} занятий</h2>
+        <div class="kinds">${[['core', 'новые темы'], ['review', 'закрепление'], ['cut', 'срезы'], ['variant', 'варианты']].map(([k, t]) => `<span class="kind ${k}">${P.kinds[k] || 0} ${t}</span>`).join('')}</div>
+        <ol class="plan">${P.lessons.map(l => `<li><span class="n">${l.n}</span><span class="kind ${l.kind}">${KIND[l.kind]}</span> ${l.parts.length ? l.parts.map(p => `<span class="p"><b>${p.id}</b> ${esc(short(p.name))}</span>`).join('') : `<span class="p muted">${esc(l.label)}</span>`}</li>`).join('')}</ol>
+        ${next(4)}`;
+    } else {
+      main = !S.ready && !nMarks ? `<div class="empty"><b>Сначала пробное занятие</b><p>Отметьте задания и знания — PDF получится точнее.</p><button class="primary" data-step="1">К пробному занятию</button> <button id="ready">Сделать без отметок</button></div>`
+        : `<div class="row"><input id="stName" value="${esc(S.name)}" placeholder="Имя ученика" autocomplete="off" aria-label="Имя ученика"><button class="primary" id="pdfBtn">Скачать PDF</button></div><p class="hint" id="pdfNote"></p>
+        <div class="docwrap">${docHtml(st, P)}</div>`;
+    }
+    setTimeout(() => { const r = document.getElementById('ready'); if (r) r.onclick = () => { S.ready = true; view(); }; }, 0);
+    return head + `<section class="stepbody">${main}</section>`;
+  }
+  decode(); view();
+})();
+</script>
+<script>document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[data-back]');if(!a||e.metaKey||e.ctrlKey)return;try{if(history.length>1&&document.referrer&&new URL(document.referrer).origin===location.origin){e.preventDefault();history.back()}}catch(_){}});</script>
